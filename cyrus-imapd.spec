@@ -44,7 +44,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.3.8
-Release:	%mkrel 0
+Release:	%mkrel 1
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -120,6 +120,7 @@ BuildRequires:	groff >= 1.15-8
 %if %{with_snmp}
 BuildRequires:	net-snmp-devel >= 5.1-6mdk
 BuildRequires:  libelfutils-devel
+Requires:	net-snmp-mibs
 %endif
 %if %{build_virtualdomains_in_ldap}
 BuildRequires:	openldap-devel
@@ -439,6 +440,16 @@ file -C -m %{buildroot}%{_datadir}/%{name}/rpm/magic
 # required if upgrading from 2.2.x -> 2.3.6+
 %{__install} -m 755 tools/migrate-metadata %{buildroot}%{_cyrexecdir}/migrate-metadata
 
+# provide the cyrusMaster.conf file, discovered by doing:
+# /usr/lib/cyrus-imapd/cyrus-master -p /var/run/cyrus-master.pid -D
+%if %{with_snmp}
+install -d %{buildroot}/var/lib/net-snmp
+echo "# placeholder" > %{buildroot}/var/lib/net-snmp/cyrusMaster.conf
+%endif
+
+# cleanup
+find %{buildroot}%{perl_vendorarch} -name "*.annotate" | xargs rm -f
+
 %pre
 # Create 'cyrus' user on target host
 %if %{SASLGROUP}
@@ -617,6 +628,7 @@ fi
 %attr(0644,root,root) %{_datadir}/%{name}/rpm/*
 %if %{with_snmp}
 %attr(0644,root,root) %{_datadir}/snmp/mibs/*
+%attr(0644,%{_cyrususer},%{_cyrusgroup}) /var/lib/net-snmp/cyrusMaster.conf
 %endif
 %attr(0644,root,root) %{_mandir}/man5/*
 %attr(0644,root,root) %{_mandir}/man8/arbitron.8*
