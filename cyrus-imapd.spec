@@ -1,8 +1,3 @@
-
-# THIS PACKAGE IS STORED IN SVN
-# PLEASE DO NOT UPLOAD WITHOUT
-# COMMITTING YOUR CHANGES FIRST
-
 # compatibility macros
 %{?!mdkversion: %define mdkversion %(perl -pe '/(\\d+)\.(\\d)\.?(\\d)?/; $_="$1$2".($3||0)' /etc/mandrake-release)}
 %{?!mkrel:%define mkrel(c:) %{-c:0.%{-c*}.}%{!?_with_unstable:%(perl -e '$_="%{1}";m/(.\*)(\\d+)$/;$rel=${2}-1;re;print "$1$rel";').%{?subrel:%subrel}%{!?subrel:1}.%{?distversion:%distversion}%{?!distversion:%(echo $[%{mdkversion}/10])}}%{?_with_unstable:%{1}}%{?distsuffix:%distsuffix}%{?!distsuffix:mdk}}
@@ -44,7 +39,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.3.8
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -282,6 +277,8 @@ for i in `find . -type d -name CVS`  `find . -type d -name .svn` `find . -type f
 done
 
 %build
+%serverbuild
+
 CPPFLAGS="-I%{_includedir}/et"
 export CPPFLAGS
 CFLAGS="$RPM_OPT_FLAGS -fPIC"
