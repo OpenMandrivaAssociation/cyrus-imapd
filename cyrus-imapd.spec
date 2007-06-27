@@ -39,7 +39,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.3.8
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -279,7 +279,7 @@ done
 %build
 %serverbuild
 
-CPPFLAGS="-I%{_includedir}/et"
+CPPFLAGS="-I%{_includedir}/et $CPPFLAGS"
 export CPPFLAGS
 CFLAGS="$RPM_OPT_FLAGS -fPIC"
 export CFLAGS
