@@ -94,8 +94,8 @@ Requires(pre):	rpm-helper
 %if %{SASLGROUP}
 Requires(pre):	/usr/sbin/groupadd
 %endif
-Requires(post):	/sbin/chkconfig /usr/bin/openssl /usr/bin/chattr /bin/grep /bin/cp perl
-Requires(preun):/sbin/service /sbin/chkconfig /usr/sbin/userdel /bin/rm
+Requires(post):	chkconfig /usr/bin/openssl /usr/bin/chattr /bin/grep /bin/cp perl
+Requires(preun):/sbin/service chkconfig /usr/sbin/userdel /bin/rm
 %if %{SASLGROUP}
 Requires(preun):/usr/sbin/groupdel
 %endif
