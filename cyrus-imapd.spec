@@ -38,8 +38,8 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.3.8
-Release:	%mkrel 5
+Version:	2.3.10
+Release:	%mkrel 1
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -66,19 +66,17 @@ Patch5:		%{name}-mdk9.0perl-patch
 # cyrus-master instead of master in syslog
 Patch6:		%{name}-logident.patch
 # Autocreate INBOX patch (http://email.uoa.gr/projects/cyrus/autocreate/)
-Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.8/cyrus-imapd-2.3.8-autocreate-0.10-0.diff
+Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.10/cyrus-imapd-2.3.10-autocreate-0.10-0.diff
 # Create on demand folder requested by sieve filter (http://email.uoa.gr/projects/cyrus/autosievefolder/)
-Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.8/cyrus-imapd-2.3.8-autosieve-0.6.0.diff
+Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.10/cyrus-imapd-2.3.10-autosieve-0.6.0.diff
 # Remove QUOTA patch (http://email.uoa.gr/projects/cyrus/quota-patches/rmquota/)
-Patch14:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.8/cyrus-imapd-2.3.8-rmquota-0.5-0.diff
+Patch14:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
 # command line switch to disallow plaintext login
 Patch17:	%{name}-plaintext.diff
 # remove syslog message for getrlimit to infinity
 Patch18:	%{name}-2.1.16-getrlimit.patch
 # 64-bit fixes
 Patch19:	cyrus-imapd-2.2.8-64bit-fixes.patch
-# (oe) allways try to find the preferred db
-Patch20:	cyrus-imapd-2.2.12-find_db_shuffler.diff
 # (oe) for kolab2: Allow for custom annotation
 Patch21:	cyrus-imapd-annotate.diff
 # (oe) for kolab2: Patch to support virtdomains: ldap (parse domain from "email" field an LDAP user entry)
@@ -236,7 +234,6 @@ The main package is %{name}.
 %patch17 -p1 -b .plaintext
 %patch18 -p1 -b .getrlimit
 %patch19 -p1 -b .64bit-fixes
-%patch20 -p0 -b .find_db_shuffler
 
 # (oe) for kolab2: Allow for custom annotation
 %patch21 -p0 -b .annotate
@@ -303,6 +300,7 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
 %endif
     --with-extraident="Mandriva-RPM-%{version}-%{release}" \
     --with-syslogfacility=MAIL \
+    --with-bdb=db-4.2 \
     --enable-murder \
     --enable-netscapehack \
     --enable-listext \
@@ -315,7 +313,8 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
 #    --with-krb=%{_prefix}/kerberos \
 
 make clean
-%make
+# no parallel make - 2.3.10
+make
 
 # Modify docs master --> cyrus-master
 pushd man
@@ -569,6 +568,7 @@ fi
 %attr(0755,root,root) %{_cyrexecdir}/cvt_cyrusdb
 %attr(0755,root,root) %{_cyrexecdir}/cvt_cyrusdb_all
 %attr(0755,root,root) %{_cyrexecdir}/cyr_dbtool
+%attr(0755,root,root) %{_cyrexecdir}/cyr_synclog
 %attr(0755,root,root) %{_cyrexecdir}/cyrdump
 %attr(0755,root,root) %{_cyrexecdir}/cyr_expire
 %attr(0755,root,root) %{_cyrexecdir}/cyrus-master
@@ -635,6 +635,8 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/ctl_mboxlist.8*
 %attr(0644,root,root) %{_mandir}/man8/cvt_cyrusdb.8*
 %attr(0644,root,root) %{_mandir}/man8/cyr_expire.8*
+%attr(0644,root,root) %{_mandir}/man8/cyr_dbtool.8*
+%attr(0644,root,root) %{_mandir}/man8/cyr_synclog.8*
 %attr(0644,root,root) %{_mandir}/man8/cyrus-master.8*
 %attr(0644,root,root) %{_mandir}/man8/deliver.8*
 %attr(0644,root,root) %{_mandir}/man8/fud.8*
@@ -643,6 +645,7 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/ipurge.8*
 %attr(0644,root,root) %{_mandir}/man8/lmtpd.8*
 %attr(0644,root,root) %{_mandir}/man8/make_md5.8*
+%attr(0644,root,root) %{_mandir}/man8/make_sha1.8*
 %attr(0644,root,root) %{_mandir}/man8/mbexamine.8*
 %attr(0644,root,root) %{_mandir}/man8/mbpath.8*
 %attr(0644,root,root) %{_mandir}/man8/notifyd.8*
