@@ -1,7 +1,7 @@
 # compatibility macros
-%{?!mdkversion: %define mdkversion %(perl -pe '/(\\d+)\.(\\d)\.?(\\d)?/; $_="$1$2".($3||0)' /etc/mandrake-release)}
+%{?!mdkversion: %define mdkversion %(perl -pe '/(\\d+)\.(\\d)\.?(\\d)?/; $_="$1$2".($3||0)' /etc/mandriva-release)}
 %{?!mkrel:%define mkrel(c:) %{-c:0.%{-c*}.}%{!?_with_unstable:%(perl -e '$_="%{1}";m/(.\*)(\\d+)$/;$rel=${2}-1;re;print "$1$rel";').%{?subrel:%subrel}%{!?subrel:1}.%{?distversion:%distversion}%{?!distversion:%(echo $[%{mdkversion}/10])}}%{?_with_unstable:%{1}}%{?distsuffix:%distsuffix}%{?!distsuffix:mdk}}
-%{?!_with_unstable: %{error:%(echo -e "\n\n\nNOTE: THIS IS NOT AN ERROR\n\nYou are building package for a stable release, please see \nhttp://qa.mandrakesoft.com/twiki/bin/view/Main/DistroSpecificReleaseTag\nif you think this is incorrect\n\n\n ")}%(sleep 2)}
+%{?!_with_unstable: %{error:%(echo -e "\n\n\nNOTE: THIS IS NOT AN ERROR\n\nYou are building package for a stable release, please see \nhttp://qa.mandriva.com/twiki/bin/view/Main/DistroSpecificReleaseTag\nif you think this is incorrect\n\n\n ")}%(sleep 2)}
 
 # use saslauth group if
 %define SASLGROUP 0
