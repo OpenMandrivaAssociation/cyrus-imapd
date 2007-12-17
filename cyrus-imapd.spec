@@ -118,7 +118,6 @@ Requires:	net-snmp-mibs
 %if %{build_virtualdomains_in_ldap}
 BuildRequires:	openldap-devel
 %endif
-BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 
 %if %{SASLGROUP}
