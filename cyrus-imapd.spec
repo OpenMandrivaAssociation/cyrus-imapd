@@ -39,7 +39,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.3.10
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -105,7 +105,7 @@ BuildRequires:	libsasl-devel >= 2.1.15
 BuildRequires:	e2fsprogs-devel
 BuildRequires:	perl-devel
 BuildRequires:	tcp_wrappers-devel
-BuildRequires:	db4-devel >= 4.0
+BuildRequires:	db4-devel >= 4.6
 BuildRequires:	openssl-devel
 BuildRequires:	flex
 BuildRequires:	bison
@@ -118,7 +118,7 @@ Requires:	net-snmp-mibs
 %if %{build_virtualdomains_in_ldap}
 BuildRequires:	openldap-devel
 %endif
-
+Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 
 %if %{SASLGROUP}
 %define		_saslgroup saslauth
@@ -299,7 +299,7 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
 %endif
     --with-extraident="Mandriva-RPM-%{version}-%{release}" \
     --with-syslogfacility=MAIL \
-    --with-bdb=db-4.2 \
+    --with-bdb=db-4.6 \
     --enable-murder \
     --enable-netscapehack \
     --enable-listext \
