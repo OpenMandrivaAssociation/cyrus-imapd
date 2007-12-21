@@ -525,7 +525,6 @@ echo %{version} > %{_vardata}/rpm/version
 
 %_post_service %{name}
 
-
 %preun
 %_preun_service %{name}
 if [ $1 = 0 ]; then
