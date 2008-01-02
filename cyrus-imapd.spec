@@ -38,7 +38,7 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.3.10
+Version:	2.3.11
 Release:	%mkrel 2
 License:	OSI Approved
 Group:		System/Servers
@@ -66,9 +66,9 @@ Patch5:		%{name}-mdk9.0perl-patch
 # cyrus-master instead of master in syslog
 Patch6:		%{name}-logident.patch
 # Autocreate INBOX patch (http://email.uoa.gr/projects/cyrus/autocreate/)
-Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.10/cyrus-imapd-2.3.10-autocreate-0.10-0.diff
+Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.10/cyrus-imapd-2.3.11-autocreate-0.10-0.diff
 # Create on demand folder requested by sieve filter (http://email.uoa.gr/projects/cyrus/autosievefolder/)
-Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.10/cyrus-imapd-2.3.10-autosieve-0.6.0.diff
+Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.10/cyrus-imapd-2.3.11-autosieve-0.6.0.diff
 # Remove QUOTA patch (http://email.uoa.gr/projects/cyrus/quota-patches/rmquota/)
 Patch14:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
 # command line switch to disallow plaintext login
