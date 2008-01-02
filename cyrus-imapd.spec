@@ -138,6 +138,7 @@ Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 %else
 %define		_cyrusconf %{_confdir}/normal.conf
 %endif
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 %define		_ssldir %{_sysconfdir}/ssl/cyrus-imapd
 
