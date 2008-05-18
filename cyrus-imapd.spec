@@ -124,7 +124,7 @@ Requires:	net-snmp-mibs
 %if %{build_virtualdomains_in_ldap}
 BuildRequires:	openldap-devel
 %endif
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %if %{SASLGROUP}
 %define		_saslgroup saslauth
@@ -144,7 +144,7 @@ Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 %else
 %define		_cyrusconf %{_confdir}/normal.conf
 %endif
-BuildRoot:	%{_tmppath}/%{name}-%{version}-root
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %define		_ssldir %{_sysconfdir}/ssl/cyrus-imapd
 
