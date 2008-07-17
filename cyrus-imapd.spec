@@ -45,7 +45,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.3.12
-Release:	%mkrel 0.p2.1
+Release:	%mkrel 0.p2.2
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
