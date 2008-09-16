@@ -31,6 +31,10 @@
 %global with_snmp 1
 %{?_without_snmp: %global with_snmp 0}
 
+# ldap/pts support
+%global with_ldap 1
+%{?_without_ldap: %global with_ldap 0}
+
 # virtual domains in LDAP support
 # needed by Kolab2
 %define build_virtualdomains_in_ldap 1
@@ -45,7 +49,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.3.12
-Release:	%mkrel 0.p2.2
+Release:	%mkrel 0.p2.4
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -89,6 +93,10 @@ Patch21:	cyrus-imapd-annotate.diff
 Patch22:	cyrus-imapd-kolab-ldap.diff
 # (oe) for kolab2: Allow for custom annotation
 Patch23:	cyrus-imapd-cyradm_annotate.diff
+# (bluca) add ptloader to cyrus.conf 
+Patch24:	cyrus-imapd-ptloader-conf.diff
+# (bluca) fix LDAP_OPT_X_SASL_SECPROPS error in ptloader
+Patch25:	cyrus-imapd-ptloader-secprops.diff
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -121,8 +129,12 @@ BuildRequires:	net-snmp-devel >= 5.1-6mdk
 BuildRequires:  libelfutils-devel
 Requires:	net-snmp-mibs
 %endif
+%if %{with_ldap}
+BuildRequires:	openldap-devel
+%else
 %if %{build_virtualdomains_in_ldap}
 BuildRequires:	openldap-devel
+%endif
 %endif
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -249,6 +261,10 @@ The main package is %{name}.
 %endif
 # (oe) for kolab2: Allow for custom annotation
 %patch23 -p1 -b .annotate
+%if %{with_ldap}
+%patch24 -p1 -b .ptloader
+%endif
+%patch25 -p1 -b .secprops
 
 ## Extra documentation
 mkdir -p extradocs
@@ -303,6 +319,9 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
 %endif
 %if !%{with_snmp}
     --without-snmp \
+%endif
+%if %{with_ldap}
+    --with-ldap \
 %endif
     --with-extraident="Mandriva-RPM-%{version}-%{release}" \
     --with-syslogfacility=MAIL \
@@ -364,6 +383,9 @@ done
 %{__install} -d \
 %if %{with_snmp}
         %{buildroot}%{_datadir}/snmp/mibs \
+%endif
+%if %{with_ldap}
+        %{buildroot}%{_vardata}/ptclient/ \
 %endif
 	%{buildroot}%{_initrddir} \
 	%{buildroot}%{_sysconfdir}/{pam.d,sysconfig,cron.daily} \
@@ -602,6 +624,11 @@ fi
 %attr(0755,root,root) %{_cyrexecdir}/undohash
 %attr(0755,root,root) %{_cyrexecdir}/unexpunge
 %attr(0755,root,root) %{_cyrexecdir}/upgradesieve
+%if %{with_ldap}
+%attr(0755,root,root) %{_cyrexecdir}/ptdump
+%attr(0755,root,root) %{_cyrexecdir}/ptexpire
+%attr(0755,root,root) %{_cyrexecdir}/ptloader
+%endif
 %if %build_autocreate
 %attr(0755,root,root) %{_cyrexecdir}/compile_sieve
 %endif
@@ -621,6 +648,9 @@ fi
 %attr(0750,%{_cyrususer},%{_cyrusgroup}) %{_vardata}/sieve
 %attr(0750,%{_cyrususer},%{_cyrusgroup}) %{_vardata}/rpm
 %attr(0750,%{_cyrususer},%{_cyrusgroup}) %{_vardata}/backup
+%if %{with_ldap}
+%attr(0750,%{_cyrususer},%{_cyrusgroup}) %{_vardata}/ptclient
+%endif
 %attr(0500,%{_cyrususer},%{_cyrusgroup}) %dir %{_ssldir}
 %attr(0600,%{_cyrususer},%{_cyrusgroup}) %config(noreplace) %{_ssldir}/cyrus-imapd.cnf
 %attr(0750,%{_cyrususer},%{_cyrusgroup}) %dir %{_spooldata}
