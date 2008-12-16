@@ -35,6 +35,15 @@
 %global with_ldap 1
 %{?_without_ldap: %global with_ldap 0}
 
+%global with_mysql 1
+%{?_without_mysql: %global with_mysql 0}
+
+%global with_pgsql 1
+%{?_without_pgsql: %global with_pgsql 0}
+
+%global with_sqlite 1
+%{?_without_sqlite: %global with_sqlite 0}
+
 # virtual domains in LDAP support
 # needed by Kolab2
 %define build_virtualdomains_in_ldap 1
@@ -43,18 +52,18 @@
 %if %mdkversion <= 200810
 %define db4_version 4.2
 %else
-%define db4_version 4.6
+%define db4_version 4.7
 %endif
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.3.12
-Release:	%mkrel 0.p2.5
+Version:	2.3.13
+Release:	%mkrel 1
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
-Source0:	ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/%{name}-%{version}p2.tar.gz
-Source1:        ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/%{name}-%{version}p2.tar.gz.sig
+Source0:	ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/%{name}-%{version}.tar.gz
+Source1:        ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/%{name}-%{version}.tar.gz.sig
 Source2:	cyrus-procmailrc
 Source4:	cyrus-user-procmailrc.template
 Source6:	%{name}.imap-2.1.x-conf
@@ -76,9 +85,9 @@ Patch5:		%{name}-mdk9.0perl-patch
 # cyrus-master instead of master in syslog
 Patch6:		%{name}-logident.patch
 # Autocreate INBOX patch (http://email.uoa.gr/projects/cyrus/autocreate/)
-Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.12p2/cyrus-imapd-2.3.12p2-autocreate-0.10-0.diff
+Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.13/cyrus-imapd-2.3.13-autocreate-0.10-0.diff
 # Create on demand folder requested by sieve filter (http://email.uoa.gr/projects/cyrus/autosievefolder/)
-Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.12p2/cyrus-imapd-2.3.12p2-autosieve-0.6.0.diff
+Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.13/cyrus-imapd-2.3.13-autosieve-0.6.0.diff
 # Remove QUOTA patch (http://email.uoa.gr/projects/cyrus/quota-patches/rmquota/)
 Patch14:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
 # command line switch to disallow plaintext login
@@ -97,6 +106,8 @@ Patch23:	cyrus-imapd-cyradm_annotate.diff
 Patch24:	cyrus-imapd-ptloader-conf.diff
 # (bluca) fix LDAP_OPT_X_SASL_SECPROPS error in ptloader
 Patch25:	cyrus-imapd-ptloader-secprops.diff
+# http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
+Patch26:	cyrus-imapd-2.3.13-format-security_fix.diff
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -135,6 +146,15 @@ BuildRequires:	openldap-devel
 %if %{build_virtualdomains_in_ldap}
 BuildRequires:	openldap-devel
 %endif
+%endif
+%if %{with_mysql}
+BuildRequires:	mysql-devel
+%endif
+%if %{with_pgsql}
+BuildRequires:	postgresql-devel
+%endif
+%if %{with_sqlite}
+BuildRequires:	sqlite3-devel
 %endif
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -236,7 +256,7 @@ The main package is %{name}.
 
 %prep
 
-%setup -q -n %{name}-%{version}p2
+%setup -q -n %{name}-%{version}
 %patch5 -b .mdk9.0perl
 %patch6
 %if %{build_autocreate}
@@ -265,6 +285,8 @@ The main package is %{name}.
 %patch24 -p1 -b .ptloader
 %endif
 %patch25 -p1 -b .secprops
+
+%patch26 -p1 -b .format-security_fix
 
 ## Extra documentation
 mkdir -p extradocs
@@ -295,6 +317,7 @@ for i in `find . -type d -name CVS`  `find . -type d -name .svn` `find . -type f
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
 
+
 %build
 %serverbuild
 
@@ -322,6 +345,15 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
 %endif
 %if %{with_ldap}
     --with-ldap \
+%endif
+%if %{with_mysql}
+    --with-mysql \
+%endif
+%if %{with_pgsql}
+    --with-pgsql \
+%endif
+%if %{with_sqlite}
+    --with-sqlite \
 %endif
     --with-extraident="Mandriva-RPM-%{version}-%{release}" \
     --with-syslogfacility=MAIL \
@@ -617,6 +649,7 @@ fi
 %attr(0755,root,root) %{_cyrexecdir}/reconstruct
 %attr(0755,root,root) %{_cyrexecdir}/rehash
 %attr(0755,root,root) %{_cyrexecdir}/sievec
+%attr(0755,root,root) %{_cyrexecdir}/sieved
 %attr(0755,root,root) %{_cyrexecdir}/squatter
 %attr(0755,root,root) %{_cyrexecdir}/timsieved
 %attr(0755,root,root) %{_cyrexecdir}/tls_prune
