@@ -57,7 +57,7 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.3.13
+Version:	2.3.14
 Release:	%mkrel 1
 License:	OSI Approved
 Group:		System/Servers
@@ -85,9 +85,9 @@ Patch5:		%{name}-mdk9.0perl-patch
 # cyrus-master instead of master in syslog
 Patch6:		%{name}-logident.patch
 # Autocreate INBOX patch (http://email.uoa.gr/projects/cyrus/autocreate/)
-Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.13/cyrus-imapd-2.3.13-autocreate-0.10-0.diff
+Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.14/cyrus-imapd-2.3.14-autocreate-0.10-0.diff
 # Create on demand folder requested by sieve filter (http://email.uoa.gr/projects/cyrus/autosievefolder/)
-Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.13/cyrus-imapd-2.3.13-autosieve-0.6.0.diff
+Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.14/cyrus-imapd-2.3.14-autosieve-0.6.0.diff
 # Remove QUOTA patch (http://email.uoa.gr/projects/cyrus/quota-patches/rmquota/)
 Patch14:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
 # command line switch to disallow plaintext login
@@ -107,7 +107,7 @@ Patch24:	cyrus-imapd-ptloader-conf.diff
 # (bluca) fix LDAP_OPT_X_SASL_SECPROPS error in ptloader
 Patch25:	cyrus-imapd-ptloader-secprops.diff
 # http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
-Patch26:	cyrus-imapd-2.3.13-format-security_fix.diff
+Patch26:	cyrus-imapd-2.3.14-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -286,7 +286,7 @@ The main package is %{name}.
 %endif
 %patch25 -p1 -b .secprops
 
-%patch26 -p1 -b .format-security_fix
+%patch26 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 ## Extra documentation
 mkdir -p extradocs
