@@ -57,8 +57,8 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.3.14
-Release:	%mkrel 2
+Version:	2.3.15
+Release:	%mkrel 1
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -85,7 +85,7 @@ Patch5:		%{name}-mdk9.0perl-patch
 # cyrus-master instead of master in syslog
 Patch6:		%{name}-logident.patch
 # Autocreate INBOX patch (http://email.uoa.gr/projects/cyrus/autocreate/)
-Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.14/cyrus-imapd-2.3.14-autocreate-0.10-0.diff
+Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.15/cyrus-imapd-2.3.15-autocreate-0.10-0.diff
 # Create on demand folder requested by sieve filter (http://email.uoa.gr/projects/cyrus/autosievefolder/)
 Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.14/cyrus-imapd-2.3.14-autosieve-0.6.0.diff
 # Remove QUOTA patch (http://email.uoa.gr/projects/cyrus/quota-patches/rmquota/)
@@ -108,6 +108,7 @@ Patch24:	cyrus-imapd-ptloader-conf.diff
 Patch25:	cyrus-imapd-ptloader-secprops.diff
 # http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
 Patch26:	cyrus-imapd-2.3.14-format_not_a_string_literal_and_no_format_arguments.diff
+Patch27:	cyrus-imapd-2.3.15-linkage_fix.diff
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -287,6 +288,8 @@ The main package is %{name}.
 %patch25 -p1 -b .secprops
 
 %patch26 -p1 -b .format_not_a_string_literal_and_no_format_arguments
+%patch27 -p0 -b .linkage_fix
+
 
 ## Extra documentation
 mkdir -p extradocs
@@ -316,7 +319,6 @@ install -m 0644 %{SOURCE8} cyrus-imapd.pamd
 for i in `find . -type d -name CVS`  `find . -type d -name .svn` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
-
 
 %build
 %serverbuild
@@ -627,9 +629,10 @@ fi
 %attr(0755,root,root) %{_cyrexecdir}/cvt_cyrusdb
 %attr(0755,root,root) %{_cyrexecdir}/cvt_cyrusdb_all
 %attr(0755,root,root) %{_cyrexecdir}/cyr_dbtool
-%attr(0755,root,root) %{_cyrexecdir}/cyr_synclog
+%attr(0755,root,root) %{_cyrexecdir}/cyr_df
 %attr(0755,root,root) %{_cyrexecdir}/cyrdump
 %attr(0755,root,root) %{_cyrexecdir}/cyr_expire
+%attr(0755,root,root) %{_cyrexecdir}/cyr_synclog
 %attr(0755,root,root) %{_cyrexecdir}/cyrus-master
 %attr(0755,root,root) %{_cyrexecdir}/dohash
 %attr(0755,root,root) %{_cyrexecdir}/fud
@@ -702,8 +705,9 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/ctl_deliver.8*
 %attr(0644,root,root) %{_mandir}/man8/ctl_mboxlist.8*
 %attr(0644,root,root) %{_mandir}/man8/cvt_cyrusdb.8*
-%attr(0644,root,root) %{_mandir}/man8/cyr_expire.8*
 %attr(0644,root,root) %{_mandir}/man8/cyr_dbtool.8*
+%attr(0644,root,root) %{_mandir}/man8/cyr_df.8*
+%attr(0644,root,root) %{_mandir}/man8/cyr_expire.8*
 %attr(0644,root,root) %{_mandir}/man8/cyr_synclog.8*
 %attr(0644,root,root) %{_mandir}/man8/cyrus-master.8*
 %attr(0644,root,root) %{_mandir}/man8/deliver.8*
