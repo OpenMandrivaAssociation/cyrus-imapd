@@ -52,7 +52,7 @@
 %if %mdkversion <= 200810
 %define db4_version 4.2
 %else
-%define db4_version 4.7
+%define db4_version 4.8
 %endif
 
 Summary:	A high-performance mail store with IMAP and POP3 support
