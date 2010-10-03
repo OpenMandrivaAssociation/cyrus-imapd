@@ -1,8 +1,3 @@
-# compatibility macros
-%{?!mdkversion: %define mdkversion %(perl -pe '/(\\d+)\.(\\d)\.?(\\d)?/; $_="$1$2".($3||0)' /etc/mandriva-release)}
-%{?!mkrel:%define mkrel(c:) %{-c:0.%{-c*}.}%{!?_with_unstable:%(perl -e '$_="%{1}";m/(.\*)(\\d+)$/;$rel=${2}-1;re;print "$1$rel";').%{?subrel:%subrel}%{!?subrel:1}.%{?distversion:%distversion}%{?!distversion:%(echo $[%{mdkversion}/10])}}%{?_with_unstable:%{1}}%{?distsuffix:%distsuffix}%{?!distsuffix:mdk}}
-%{?!_with_unstable: %{error:%(echo -e "\n\n\nNOTE: THIS IS NOT AN ERROR\n\nYou are building package for a stable release, please see \nhttp://qa.mandriva.com/twiki/bin/view/Main/DistroSpecificReleaseTag\nif you think this is incorrect\n\n\n ")}%(sleep 2)}
-
 # use saslauth group if
 %define SASLGROUP 0
 %{?_with_saslgroup: %{expand: %%define SASLGROUP 1}}
@@ -57,8 +52,8 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.3.15
-Release:	%mkrel 10
+Version:	2.3.16
+Release:	%mkrel 0.2
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -66,49 +61,53 @@ Source0:	ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/%{name}-%{version}.tar.gz
 Source1:        ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/%{name}-%{version}.tar.gz.sig
 Source2:	cyrus-procmailrc
 Source4:	cyrus-user-procmailrc.template
-Source6:	%{name}.imap-2.1.x-conf
+Source6:	cyrus-imapd.imap-2.1.x-conf
 Source7:	cyrus-imapd.pamd-0.77
 Source8:	cyrus-imapd.pamd
-Source11:	%{name}.init
-Source12:	%{name}.sysconfig
+Source11:	cyrus-imapd.init
+Source12:	cyrus-imapd.sysconfig
 Source13:       http://clement.hermann.free.fr/scripts/Cyrus/imapcreate.pl
-Source14:       %{name}.README.RPM
-Source15:	%{name}.cvt_cyrusdb_all
-Source16:	%{name}.magic
-Source17:	mkimapdcert
-Source18:	%{name}.cnf
+Source14:       cyrus-imapd.README.RPM
+Source15:	cyrus-imapd.cvt_cyrusdb_all
 Source19:	cyrus-imapd-procmail+cyrus.mc
-Source20:	%{name}.cron-daily
+Source20:	cyrus-imapd.cron-daily
 Source21:	http://ftp.andrew.cmu.edu/pub/net/mibs/cmu/cmu.mib
 # This patch fixes the perl install path for mdk9.0 and later
-Patch5:		%{name}-mdk9.0perl-patch
+Patch1:		cyrus-imapd-mdk9.0perl-patch
 # cyrus-master instead of master in syslog
-Patch6:		%{name}-logident.patch
+Patch2:		cyrus-imapd-logident.patch
 # Autocreate INBOX patch (http://email.uoa.gr/projects/cyrus/autocreate/)
-Patch11:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.15/cyrus-imapd-2.3.15-autocreate-0.10-0.diff
+Patch3:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.16/cyrus-imapd-2.3.16-autocreate-0.10-0.diff
 # Create on demand folder requested by sieve filter (http://email.uoa.gr/projects/cyrus/autosievefolder/)
-Patch13:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.14/cyrus-imapd-2.3.14-autosieve-0.6.0.diff
+Patch4:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.16/cyrus-imapd-2.3.16-autosieve-0.6.0.diff
 # Remove QUOTA patch (http://email.uoa.gr/projects/cyrus/quota-patches/rmquota/)
-Patch14:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
+Patch5:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
 # command line switch to disallow plaintext login
-Patch17:	%{name}-plaintext.diff
-# remove syslog message for getrlimit to infinity
-Patch18:	%{name}-2.1.16-getrlimit.patch
+Patch6:	cyrus-imapd-plaintext.diff
 # 64-bit fixes
-Patch19:	cyrus-imapd-2.2.8-64bit-fixes.patch
-# (oe) for kolab2: Allow for custom annotation
-Patch21:	cyrus-imapd-annotate.diff
+Patch7:	cyrus-imapd-2.2.8-64bit-fixes.patch
 # (oe) for kolab2: Patch to support virtdomains: ldap (parse domain from "email" field an LDAP user entry)
-Patch22:	cyrus-imapd-kolab-ldap.diff
+Patch8:	cyrus-imapd-kolab-ldap.diff
 # (oe) for kolab2: Allow for custom annotation
-Patch23:	cyrus-imapd-cyradm_annotate.diff
+Patch9:	cyrus-imapd-cyradm_annotate.diff
 # (bluca) add ptloader to cyrus.conf 
-Patch24:	cyrus-imapd-ptloader-conf.diff
+Patch10:	cyrus-imapd-ptloader-conf.diff
 # (bluca) fix LDAP_OPT_X_SASL_SECPROPS error in ptloader
-Patch25:	cyrus-imapd-ptloader-secprops.diff
+Patch11:	cyrus-imapd-ptloader-secprops.diff
 # http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
-Patch26:	cyrus-imapd-2.3.14-format_not_a_string_literal_and_no_format_arguments.diff
-Patch27:	cyrus-imapd-2.3.15-linkage_fix.diff
+Patch12:	cyrus-imapd-2.3.14-format_not_a_string_literal_and_no_format_arguments.diff
+# remove verbosity of some syslog messages (simon matter)
+Patch13:	cyrus-imapd-2.1.16-getrlimit.patch
+Patch14:	cyrus-imapd-2.3.12-skiplist_verbosity.patch
+Patch15:	cyrus-imapd-2.3.12-statuscache_verbosity.patch
+Patch16:	cyrus-imapd-2.3.16-user_deny_verbosity.patch
+# Other patches from simon matter
+Patch17:	cyrus-imapd-2.3.7-mancyrusdb.patch
+Patch18:	cyrus-imapd-2.3.13-make_md5_sha1_dirs.patch
+Patch19:	cyrus-imapd-2.3.11-mkimap.patch
+Patch20:	cyrus-imapd-2.3.16-sync_client_tls_capability_response.patch
+Patch21:	cyrus-imapd-2.3.16-sieve_port.patch
+
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -178,8 +177,6 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %define		_cyrusconf %{_confdir}/normal.conf
 %endif
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-
-%define		_ssldir %{_sysconfdir}/ssl/cyrus-imapd
 
 %description
 The Cyrus IMAP Server is a scaleable enterprise mail system
@@ -258,38 +255,43 @@ The main package is %{name}.
 %prep
 
 %setup -q -n %{name}-%{version}
-%patch5 -b .mdk9.0perl
-%patch6
+%patch1 -b .mdk9.0perl.orig
+%patch2
 %if %{build_autocreate}
-%patch11 -p1 -b .autocreate
+%patch3 -p1 -b .autocreate.orig
 %endif
 %if %{build_autosieve}
-%patch13 -p1 -b .autosieve
+%patch4 -p1 -b .autosieve.orig
 %endif
 %if %{build_rmquota}
-%patch14 -p1 -b .rmquota
+%patch5 -p1 -b .rmquota.orig
 %endif
 
-%patch17 -p1 -b .plaintext
-%patch18 -p1 -b .getrlimit
-%patch19 -p1 -b .64bit-fixes
+%patch6 -p1 -b .plaintext.orig
+%patch7 -p1 -b .64bit-fixes.orig
 
-# (oe) for kolab2: Allow for custom annotation
-%patch21 -p0 -b .annotate
 # (oe) for kolab2: Patch to support virtdomains: ldap (parse domain from "email" field an LDAP user entry)
 %if %{build_virtualdomains_in_ldap}
-%patch22 -p1 -b .kolab-ldap
+%patch8 -p1 -b .kolab-ldap.orig
 %endif
 # (oe) for kolab2: Allow for custom annotation
-%patch23 -p1 -b .annotate
+%patch9 -p1 -b .annotate.orig
 %if %{with_ldap}
-%patch24 -p1 -b .ptloader
+%patch10 -p1 -b .ptloader.orig
 %endif
-%patch25 -p1 -b .secprops
+%patch11 -p1 -b .secprops.orig
+%patch12 -p1 -b .format_not_a_string_literal_and_no_format_arguments.orig
 
-%patch26 -p1 -b .format_not_a_string_literal_and_no_format_arguments
-%patch27 -p0 -b .linkage_fix
+%patch13 -p1 -b .getrlimit.orig
+%patch14 -p1 -b .skiplist_verbosity.orig
+%patch15 -p1 -b .statuscache_verbosity.orig
+%patch16 -p1 -b .user_deny_verbosity.orig
 
+%patch17 -p1 -b .mancyrusdb.orig
+%patch18 -p1 -b .make_md5_sha1_dirs.orig
+%patch19 -p1 -b .mkimap.orig
+%patch20 -p1 -b .sync_client_tls_capability_response.orig
+%patch21 -p1 -b .sieve_port.orig
 
 ## Extra documentation
 mkdir -p extradocs
@@ -346,10 +348,10 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
     --without-snmp \
 %endif
 %if %{with_ldap}
-    --with-ldap \
+    --with-ldap=/usr \
 %endif
 %if %{with_mysql}
-    --with-mysql \
+    --with-mysql --with-mysql-incdir=/usr/include/mysql \
 %endif
 %if %{with_pgsql}
     --with-pgsql \
@@ -363,12 +365,10 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
     --enable-murder \
     --enable-netscapehack \
     --enable-listext \
-    --enable-annotatemore \
     --enable-nntp \
     --with-perl=%{__perl} \
     --with-cyrus-prefix=%{_cyrexecdir} \
     --with-service-path=%{_cyrexecdir} \
-    --with-auth=unix
 #    --with-krb=%{_prefix}/kerberos \
 
 make clean
@@ -392,6 +392,8 @@ popd
 # Cleanup of doc dir
 find doc perl -name CVS -type d | xargs -r rm -fr
 find doc -name "*~" -type f | xargs -r rm -f
+find doc -name "*.*.orig" -type f | xargs -r rm -f
+
 rm -f doc/Makefile.dist
 rm -f doc/text/htmlstrip.c
 
@@ -426,15 +428,10 @@ done
 	%{buildroot}%{_libdir}/sasl \
 	%{buildroot}%{_bindir} \
 	%{buildroot}%{_spooldata}/stage. \
-	%{buildroot}%{_vardata}/{user,quota,proc,log,msg,socket,db,sieve,rpm,backup} \
-        %{buildroot}%{_datadir}/%{name}/rpm \
-        %{buildroot}%{_ssldir}
+	%{buildroot}%{_vardata}/{user,quota,proc,log,msg,socket,db,sieve,rpm,backup}
 
 # Install additional files
 %{__install} -m 755 %{SOURCE15}   %{buildroot}%{_cyrexecdir}/cvt_cyrusdb_all
-%{__install} -m 755 %{SOURCE16}   %{buildroot}%{_datadir}/%{name}/rpm/magic
-%{__install} -m 755 %{SOURCE17}   %{buildroot}%{_cyrexecdir}/mkimapdcert
-%{__install} -m 600 %{SOURCE18}   %{buildroot}%{_ssldir}/cyrus-imapd.cnf
 
 # Install config files
 %{__install} -m 644 %{_cyrusconf} %{buildroot}%{_sysconfdir}/cyrus.conf
@@ -445,6 +442,8 @@ done
 %{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/sieve
 %{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/mupdate
 %{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/lmtp
+%{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/nntp
+%{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/csync
 
 %{__install} -m 644 %{SOURCE12}   %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 %{__install} -m 755 %{SOURCE11}   %{buildroot}%{_initrddir}/%{name}
@@ -492,9 +491,6 @@ ln -sf ../lib/cyrus-imapd/cyradm %{buildroot}%{_bindir}/
 ln -sf ../lib/cyrus-imapd/imtest %{buildroot}%{_bindir}/
 ln -sf ../lib/cyrus-imapd/imapcreate %{buildroot}%{_bindir}/
 
-# Create magic file for skiplist
-file -C -m %{buildroot}%{_datadir}/%{name}/rpm/magic
-
 # required if upgrading from 2.2.x -> 2.3.6+
 %{__install} -m 755 tools/migrate-metadata %{buildroot}%{_cyrexecdir}/migrate-metadata
 
@@ -518,21 +514,25 @@ find %{buildroot}%{perl_vendorarch} -name "*.annotate" | xargs rm -f
 /usr/sbin/useradd -c "Cyrus IMAP Server" -d %{_vardata} -g %{_cyrusgroup} \
 	-s /bin/bash -r %{_cyrususer} 2> /dev/null || :
 %endif
+# move ssl certificate/key from /etc/ssl to /etc/pki/tls
+if [ -f /etc/ssl/cyrus-imapd/cyrus-imapd.pem -a ! -f /etc/pki/tls/private/cyrus-imapd.pem -a ! -f /etc/pki/tls/certs/cyrus-imapd.pem  ];then
+	touch /etc/pki/tls/private/cyrus-imapd.pem
+	chmod 600 /etc/pki/tls/private/cyrus-imapd.pem
+	awk '/^-----BEGIN PRIVATE KEY-----/ {p=1} /-----END PRIVATE KEY-----/ {p=0;print} p == 1 {print}'  /etc/ssl/cyrus-imapd/cyrus-imapd.pem > /etc/pki/tls/private/cyrus-imapd.pem
+	awk '/^-----BEGIN PRIVATE KEY-----/ {p=0} /-----END PRIVATE KEY-----/ {p=1;next} p == 1 {print}' /etc/ssl/cyrus-imapd/cyrus-imapd.pem > /etc/pki/tls/certs/cyrus-imapd.pem
+	sed -i -e 's,^[[:space:]]*tls_cert_file:[[:space:]]\+/etc/ssl/cyrus-imapd/cyrus-imapd.pem\>,tls_cert_file: /etc/pki/tls/certs/cyrus-imapd.pem,' /etc/imapd.conf
+	sed -i -e 's,^[[:space:]]*tls_key_file:[[:space:]]\+/etc/ssl/cyrus-imapd/cyrus-imapd.pem\>,tls_key_file: /etc/pki/tls/private/cyrus-imapd.pem,' /etc/imapd.conf
+	rm -f /etc/ssl/cyrus-imapd/cyrus-imapd.pem
+fi
 
 %post
 if [ $1 = 1 ] ; then
-
 # make sure we own the stuff, otherwise /var/log/mail/* will fill
 # the whole disk with error messages...
 chown -R %{_cyrususer}:%{_cyrusgroup} %{_vardata} %{_spooldata}
-
-  #Create a self-signed server key and certificate 
-  #The script checks first if they exists, if yes, it exits, 
-  #otherwise, it creates them.
-  if ! [ -f %{_ssldir}/cyrus-imapd.pem ];then
-    sh %{_cyrexecdir}/mkimapdcert >/dev/null 
-  fi
 fi
+%_create_ssl_certificate cyrus-imapd
+chown %{_cyrususer}:%{_cyrusgroup} /etc/pki/tls/private/cyrus-imapd.pem
 
 
 # Force synchronous updates only on ext2 filesystems
@@ -644,7 +644,6 @@ fi
 %attr(0755,root,root) %{_cyrexecdir}/mbpath
 %attr(0755,root,root) %{_cyrexecdir}/migrate-metadata
 %attr(0755,root,root) %{_cyrexecdir}/mkimap
-%attr(0755,root,root) %{_cyrexecdir}/mkimapdcert
 %attr(0755,root,root) %{_cyrexecdir}/mknewsgroups
 %attr(0755,root,root) %{_cyrexecdir}/notifyd
 %attr(0755,root,root) %{_cyrexecdir}/pop3d
@@ -687,13 +686,8 @@ fi
 %if %{with_ldap}
 %attr(0750,%{_cyrususer},%{_cyrusgroup}) %{_vardata}/ptclient
 %endif
-%attr(0500,%{_cyrususer},%{_cyrusgroup}) %dir %{_ssldir}
-%attr(0600,%{_cyrususer},%{_cyrusgroup}) %config(noreplace) %{_ssldir}/cyrus-imapd.cnf
 %attr(0750,%{_cyrususer},%{_cyrusgroup}) %dir %{_spooldata}
 %attr(0750,%{_cyrususer},%{_cyrusgroup}) %{_spooldata}/*
-%attr(0755,root,root) %dir %{_datadir}/%{name}
-%attr(0755,root,root) %dir %{_datadir}/%{name}/rpm
-%attr(0644,root,root) %{_datadir}/%{name}/rpm/*
 %if %{with_snmp}
 %attr(0644,root,root) %{_datadir}/snmp/mibs/*
 %attr(0644,%{_cyrususer},%{_cyrusgroup}) /var/lib/net-snmp/cyrusMaster.conf
@@ -743,6 +737,7 @@ fi
 %defattr(-,root,root)
 %doc doc/text/install-murder
 %config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/mupdate
+%config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/csync
 %attr(0755,root,root) %{_cyrexecdir}/lmtpproxyd
 %attr(0755,root,root) %{_cyrexecdir}/mupdate
 %attr(0755,root,root) %{_cyrexecdir}/pop3proxyd
@@ -751,6 +746,7 @@ fi
 %files nntp
 %defattr(-,root,root)
 %doc doc/text/install-netnews
+%config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/nntp
 %attr(0755,root,root) %{_cyrexecdir}/fetchnews
 %attr(0755,root,root) %{_cyrexecdir}/nntpd
 %attr(0644,root,root) %{_mandir}/man8/nntpd.8*
