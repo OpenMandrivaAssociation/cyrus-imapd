@@ -255,7 +255,7 @@ The main package is %{name}.
 %prep
 
 %setup -q -n %{name}-%{version}
-%patch1 -b .mdk9.0perl.orig
+%patch1 -p0 -b .mdk9.0perl.orig
 %patch2
 %if %{build_autocreate}
 %patch3 -p1 -b .autocreate.orig
