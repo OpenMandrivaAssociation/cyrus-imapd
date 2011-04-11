@@ -53,7 +53,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.3.16
-Release:	%mkrel 4
+Release:	%mkrel 5
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://asg.web.cmu.edu/cyrus/imapd/
@@ -107,6 +107,7 @@ Patch18:	cyrus-imapd-2.3.13-make_md5_sha1_dirs.patch
 Patch19:	cyrus-imapd-2.3.11-mkimap.patch
 Patch20:	cyrus-imapd-2.3.16-sync_client_tls_capability_response.patch
 Patch21:	cyrus-imapd-2.3.16-sieve_port.patch
+Patch22:	99-berkelydb-5.1.dpatch
 
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
@@ -130,7 +131,7 @@ BuildRequires:	libsasl-devel >= 2.1.15
 BuildRequires:	e2fsprogs-devel
 BuildRequires:	perl-devel
 BuildRequires:	tcp_wrappers-devel
-BuildRequires:	db4-devel >= %{db4_version}
+BuildRequires:	db-devel >= %{db4_version}
 BuildRequires:	openssl-devel
 BuildRequires:	flex
 BuildRequires:	bison
@@ -292,6 +293,7 @@ The main package is %{name}.
 %patch19 -p1 -b .mkimap.orig
 %patch20 -p1 -b .sync_client_tls_capability_response.orig
 %patch21 -p1 -b .sieve_port.orig
+%patch22 -p1 -b .db51
 
 ## Extra documentation
 mkdir -p extradocs
