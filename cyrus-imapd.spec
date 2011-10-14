@@ -44,25 +44,20 @@
 %define build_virtualdomains_in_ldap 1
 %{?_without_virtualdomains_in_ldap: %define build_virtualdomains_in_ldap 0}
 
-%if %mdkversion <= 200810
-%define db4_version 4.2
-%else
-%define db4_version 4.8
-%endif
+%define db4_version 5.2
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.3.16
-Release:	%mkrel 8
+Version:	2.3.18
+Release:	%mkrel 1
 License:	OSI Approved
 Group:		System/Servers
-URL:		http://asg.web.cmu.edu/cyrus/imapd/
-Source0:	ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/%{name}-%{version}.tar.gz
-Source1:        ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/%{name}-%{version}.tar.gz.sig
+URL:		http://cyrusimap.org/
+Source0:	ftp://ftp.cyrusimap.org/cyrus-imapd/%{name}-%{version}.tar.gz
+Source1:        ftp://ftp.cyrusimap.org/cyrus-imapd/%{name}-%{version}.tar.gz.sig
 Source2:	cyrus-procmailrc
 Source4:	cyrus-user-procmailrc.template
 Source6:	cyrus-imapd.imap-2.1.x-conf
-Source7:	cyrus-imapd.pamd-0.77
 Source8:	cyrus-imapd.pamd
 Source11:	cyrus-imapd.init
 Source12:	cyrus-imapd.sysconfig
@@ -105,10 +100,8 @@ Patch16:	cyrus-imapd-2.3.16-user_deny_verbosity.patch
 Patch17:	cyrus-imapd-2.3.7-mancyrusdb.patch
 Patch18:	cyrus-imapd-2.3.13-make_md5_sha1_dirs.patch
 Patch19:	cyrus-imapd-2.3.11-mkimap.patch
-Patch20:	cyrus-imapd-2.3.16-sync_client_tls_capability_response.patch
 Patch21:	cyrus-imapd-2.3.16-sieve_port.patch
 Patch22:	99-berkelydb-5.1.dpatch
-Patch23:	cyrus-imapd-2.3.16-CVE-2011-1926.diff
 
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
@@ -201,7 +194,7 @@ package).
 %package	murder
 Summary:	Cyrus IMAP server murder aggregator system files
 Group:		System/Servers
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} >= %{version}-%{release}
 
 %description	murder
 The %{name}-murder package contains the Cyrus murder aggregator system,
@@ -212,7 +205,7 @@ and frontend proxy servers.
 %package	nntp
 Summary:	Cyrus IMAP server murder nntp support files
 Group:		System/Servers
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} >= %{version}-%{release}
 Conflicts:	leafnode
 
 %description	nntp
@@ -245,7 +238,7 @@ The main package is %{name}.
 %package	utils
 Summary:	Cyrus IMAPd server admin utilities
 Group:		System/Servers
-Requires:	perl-Cyrus = %{version}-%{release}
+Requires:	perl-Cyrus >= %{version}-%{release}
 
 %description	utils
 This package contains Cyrus IMAPd server administrative tools. It 
@@ -292,10 +285,8 @@ The main package is %{name}.
 %patch17 -p1 -b .mancyrusdb.orig
 %patch18 -p1 -b .make_md5_sha1_dirs.orig
 %patch19 -p1 -b .mkimap.orig
-%patch20 -p1 -b .sync_client_tls_capability_response.orig
 %patch21 -p1 -b .sieve_port.orig
 %patch22 -p1 -b .db51
-%patch23 -p1 -b .CVE-2011-1926
 
 ## Extra documentation
 mkdir -p extradocs
@@ -314,12 +305,7 @@ popd
 # fix build under mdx8.2
 perl -ni -e "print unless /^AC_PREREQ/" configure.in
 
-# fix conditional pam config file
-%if %{mdkversion} < 200610
-install -m 0644 %{SOURCE7} cyrus-imapd.pamd
-%else
 install -m 0644 %{SOURCE8} cyrus-imapd.pamd
-%endif
 
 # cleanup
 for i in `find . -type d -name CVS`  `find . -type d -name .svn` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
