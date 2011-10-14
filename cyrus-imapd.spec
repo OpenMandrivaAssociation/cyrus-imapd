@@ -102,7 +102,6 @@ Patch18:	cyrus-imapd-2.3.13-make_md5_sha1_dirs.patch
 Patch19:	cyrus-imapd-2.3.11-mkimap.patch
 Patch21:	cyrus-imapd-2.3.16-sieve_port.patch
 Patch22:	99-berkelydb-5.1.dpatch
-
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -120,7 +119,9 @@ Requires(preun):/usr/sbin/groupdel
 Requires(postun):/sbin/service
 Provides:	imap
 Provides:	imap-server
-BuildRequires:	autoconf2.5
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	libsasl-devel >= 2.1.15
 BuildRequires:	e2fsprogs-devel
 BuildRequires:	perl-devel
@@ -130,6 +131,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	groff >= 1.15-8
+BuildRequires:	perl-Digest-SHA1
 %if %{with_snmp}
 BuildRequires:	net-snmp-devel >= 5.1-6mdk
 BuildRequires:  libelfutils-devel
