@@ -44,7 +44,7 @@
 %define build_virtualdomains_in_ldap 1
 %{?_without_virtualdomains_in_ldap: %define build_virtualdomains_in_ldap 0}
 
-%define db4_version 5.2
+%define db_version 5.2
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
@@ -123,10 +123,10 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool
 BuildRequires:	libsasl-devel >= 2.1.15
-BuildRequires:	e2fsprogs-devel
+BuildRequires:	ext2fs-devel
 BuildRequires:	perl-devel
 BuildRequires:	tcp_wrappers-devel
-BuildRequires:	db-devel >= %{db4_version}
+BuildRequires:	db-devel >= %{db_version}
 BuildRequires:	openssl-devel
 BuildRequires:	flex
 BuildRequires:	bison
@@ -353,7 +353,7 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
 %endif
     --with-extraident="Mandriva-RPM-%{version}-%{release}" \
     --with-syslogfacility=MAIL \
-    --with-bdb=db-%{db4_version} \
+    --with-bdb=db-%{db_version} \
     --enable-murder \
     --enable-netscapehack \
     --enable-listext \
