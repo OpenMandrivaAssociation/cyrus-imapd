@@ -102,6 +102,7 @@ Patch18:	cyrus-imapd-2.3.13-make_md5_sha1_dirs.patch
 Patch19:	cyrus-imapd-2.3.11-mkimap.patch
 Patch21:	cyrus-imapd-2.3.16-sieve_port.patch
 Patch22:	99-berkelydb-5.1.dpatch
+Patch23:	cyrus-imapd-2.3.18-perl5.14.diff
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -289,6 +290,7 @@ The main package is %{name}.
 %patch19 -p1 -b .mkimap.orig
 %patch21 -p1 -b .sieve_port.orig
 %patch22 -p1 -b .db51
+%patch23 -p0 -b .perl5.14
 
 ## Extra documentation
 mkdir -p extradocs
