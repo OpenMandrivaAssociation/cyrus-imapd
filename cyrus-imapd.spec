@@ -134,7 +134,7 @@ BuildRequires:	groff >= 1.15-8
 BuildRequires:	perl-Digest-SHA1
 %if %{with_snmp}
 BuildRequires:	net-snmp-devel >= 5.1-6mdk
-BuildRequires:  libelfutils-devel
+BuildRequires:  elfutils-devel
 Requires:	net-snmp-mibs
 %endif
 %if %{with_ldap}
