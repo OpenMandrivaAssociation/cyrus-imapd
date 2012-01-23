@@ -44,8 +44,6 @@
 %define build_virtualdomains_in_ldap 1
 %{?_without_virtualdomains_in_ldap: %define build_virtualdomains_in_ldap 0}
 
-%define db_version 5.2
-
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.3.18
@@ -120,14 +118,12 @@ Requires(preun):/usr/sbin/groupdel
 Requires(postun):/sbin/service
 Provides:	imap
 Provides:	imap-server
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	libtool
+BuildRequires:	autoconf automake libtool
 BuildRequires:	libsasl-devel >= 2.1.15
 BuildRequires:	ext2fs-devel
 BuildRequires:	perl-devel
 BuildRequires:	tcp_wrappers-devel
-BuildRequires:	db-devel >= %{db_version}
+BuildRequires:	db-devel
 BuildRequires:	openssl-devel
 BuildRequires:	flex
 BuildRequires:	bison
@@ -319,6 +315,11 @@ done
 %build
 %serverbuild
 
+# it does not work with -fPIE and someone added that to the serverbuild macro...
+CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
+CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
+RPM_OPT_FLAGS=`echo $RPM_OPT_FLAGS |sed -e 's|-fPIE||g'`
+
 CPPFLAGS="-I%{_includedir}/et $CPPFLAGS"
 export CPPFLAGS
 CFLAGS="$RPM_OPT_FLAGS -fPIC"
@@ -329,10 +330,12 @@ export LDFLAGS
 #with the existing autom4te.cache autoheader would fail with the message
 #Can't locate object method "path" via package "Request" at /usr/share/autoconf/Autom4te/C4che.pm line 69, <GEN1> line 111.
 #
-
 rm -rf autom4te.cache configure
 export WANT_AUTOCONF_2_5=1
 libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
+
+# this removes rpath
+export andrew_cv_runpath_switch=none
 
 %configure2_5x \
 %if %{IDLED}
@@ -355,7 +358,7 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
 %endif
     --with-extraident="Mandriva-RPM-%{version}-%{release}" \
     --with-syslogfacility=MAIL \
-    --with-bdb=db-%{db_version} \
+    --with-bdb=db --with-bdb-libdir=%{_libdir} \
     --enable-murder \
     --enable-netscapehack \
     --enable-listext \
