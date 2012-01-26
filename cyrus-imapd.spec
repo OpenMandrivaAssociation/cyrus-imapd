@@ -597,7 +597,6 @@ fi
 %files
 %doc doc/* extradocs/*
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/*.conf
-%attr(0755,root,root) %config(noreplace) %{_initrddir}/%{name}
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %attr(0644,root,root) %config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/pop
 %attr(0644,root,root) %config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/imap
