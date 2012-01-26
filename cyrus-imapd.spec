@@ -19,7 +19,7 @@
 %{?_without_autosieve: %define build_autosieve 0}
 
 # remove quota files extension:
-%define build_rmquota 1
+%define build_rmquota 0
 %{?_without_rmquota: %define build_rmquota 0}
  
 # snmp support
@@ -46,8 +46,8 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.3.18
-Release:	%mkrel 2
+Version:	2.4.13
+Release:	1
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://cyrusimap.org/
@@ -57,7 +57,6 @@ Source2:	cyrus-procmailrc
 Source4:	cyrus-user-procmailrc.template
 Source6:	cyrus-imapd.imap-2.1.x-conf
 Source8:	cyrus-imapd.pamd
-Source11:	cyrus-imapd.init
 Source12:	cyrus-imapd.sysconfig
 Source13:       http://clement.hermann.free.fr/scripts/Cyrus/imapcreate.pl
 Source14:       cyrus-imapd.README.RPM
@@ -65,72 +64,69 @@ Source15:	cyrus-imapd.cvt_cyrusdb_all
 Source19:	cyrus-imapd-procmail+cyrus.mc
 Source20:	cyrus-imapd.cron-daily
 Source21:	http://ftp.andrew.cmu.edu/pub/net/mibs/cmu/cmu.mib
+#systemd support
+Source22:	cyrus-imapd.service
+Source23:	cyr_systemd_helper
 # This patch fixes the perl install path for mdk9.0 and later
 Patch1:		cyrus-imapd-mdk9.0perl-patch
 # cyrus-master instead of master in syslog
 Patch2:		cyrus-imapd-logident.patch
+# rediffed P3 and P4 comes from http://blog.vx.sk/archives/13-Autocreate-and-autosieve-patches-for-Cyrus-IMAP-Server-24.html
 # Autocreate INBOX patch (http://email.uoa.gr/projects/cyrus/autocreate/)
-Patch3:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.16/cyrus-imapd-2.3.16-autocreate-0.10-0.diff
+#Patch3:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.16/cyrus-imapd-2.3.16-autocreate-0.10-0.diff
+Patch3: cyrus-imapd-2.4.13-autocreate-0.10-0.diff
 # Create on demand folder requested by sieve filter (http://email.uoa.gr/projects/cyrus/autosievefolder/)
-Patch4:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.16/cyrus-imapd-2.3.16-autosieve-0.6.0.diff
+#Patch4:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.16/cyrus-imapd-2.3.16-autosieve-0.6.0.diff
+Patch4: cyrus-imapd-2.4.13-autosieve-0.6.0.diff
 # Remove QUOTA patch (http://email.uoa.gr/projects/cyrus/quota-patches/rmquota/)
 Patch5:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
 # command line switch to disallow plaintext login
-Patch6:	cyrus-imapd-plaintext.diff
-# 64-bit fixes
-Patch7:	cyrus-imapd-2.2.8-64bit-fixes.patch
+Patch6:	cyrus-imapd-2.4.13-plaintext.diff
 # (oe) for kolab2: Patch to support virtdomains: ldap (parse domain from "email" field an LDAP user entry)
 Patch8:	cyrus-imapd-kolab-ldap.diff
-# (oe) for kolab2: Allow for custom annotation
-Patch9:	cyrus-imapd-cyradm_annotate.diff
 # (bluca) add ptloader to cyrus.conf 
 Patch10:	cyrus-imapd-ptloader-conf.diff
 # (bluca) fix LDAP_OPT_X_SASL_SECPROPS error in ptloader
 Patch11:	cyrus-imapd-ptloader-secprops.diff
-# http://wiki.mandriva.com/en/Development/Packaging/Problems#format_not_a_string_literal_and_no_format_arguments
-Patch12:	cyrus-imapd-2.3.14-format_not_a_string_literal_and_no_format_arguments.diff
-# remove verbosity of some syslog messages (simon matter)
-Patch13:	cyrus-imapd-2.1.16-getrlimit.patch
-Patch14:	cyrus-imapd-2.3.12-skiplist_verbosity.patch
-Patch15:	cyrus-imapd-2.3.12-statuscache_verbosity.patch
-Patch16:	cyrus-imapd-2.3.16-user_deny_verbosity.patch
 # Other patches from simon matter
-Patch17:	cyrus-imapd-2.3.7-mancyrusdb.patch
-Patch18:	cyrus-imapd-2.3.13-make_md5_sha1_dirs.patch
 Patch19:	cyrus-imapd-2.3.11-mkimap.patch
 Patch21:	cyrus-imapd-2.3.16-sieve_port.patch
-Patch22:	99-berkelydb-5.1.dpatch
-Patch23:	cyrus-imapd-2.3.18-perl5.14.diff
+# fedora patches
+Patch100: http://www.oakton.edu/~jwade/cyrus/cyrus-imapd-2.1.3/cyrus-imapd-2.1.3-flock.patch
+Patch101: cyrus-imapd-2.3.1-authid_normalize.patch
+# for c-i <= 2.4.12
+Patch102: cyrus-imapd-2.4.12-debugopt.patch
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
 #Requires:	krb5-libs
-Requires(pre):	/usr/sbin/useradd 
+Requires(pre):	/usr/sbin/useradd
 Requires(pre):	rpm-helper
 %if %{SASLGROUP}
 Requires(pre):	/usr/sbin/groupadd
 %endif
-Requires(post):	chkconfig /usr/bin/openssl /usr/bin/chattr /bin/grep /bin/cp perl
-Requires(preun):/sbin/service chkconfig /usr/sbin/userdel /bin/rm
+Requires(post):	chkconfig /usr/bin/openssl /usr/bin/chattr /bin/grep /bin/cp perl systemd-units
+Requires(preun):/sbin/service chkconfig /usr/sbin/userdel /bin/rm systemd-units
 %if %{SASLGROUP}
 Requires(preun):/usr/sbin/groupdel
 %endif
-Requires(postun):/sbin/service
+Requires(postun): systemd-units
 Provides:	imap
 Provides:	imap-server
 BuildRequires:	autoconf automake libtool
-BuildRequires:	libsasl-devel >= 2.1.15
-BuildRequires:	ext2fs-devel
-BuildRequires:	perl-devel
-BuildRequires:	tcp_wrappers-devel
-BuildRequires:	db-devel
-BuildRequires:	openssl-devel
-BuildRequires:	flex
 BuildRequires:	bison
+BuildRequires:	db-devel
+BuildRequires:	ext2fs-devel
+BuildRequires:	flex
 BuildRequires:	groff >= 1.15-8
+BuildRequires:	libsasl-devel >= 2.1.15
+BuildRequires:	openssl-devel
+BuildRequires:	pcre-devel
+BuildRequires:	perl-devel
 BuildRequires:	perl-Digest-SHA1
+BuildRequires:	tcp_wrappers-devel
 %if %{with_snmp}
-BuildRequires:	net-snmp-devel >= 5.1-6mdk
+BuildRequires:	net-snmp-devel
 BuildRequires:  elfutils-devel
 Requires:	net-snmp-mibs
 %endif
@@ -150,7 +146,6 @@ BuildRequires:	postgresql-devel
 %if %{with_sqlite}
 BuildRequires:	sqlite3-devel
 %endif
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %if %{SASLGROUP}
 %define		_saslgroup saslauth
@@ -258,35 +253,27 @@ The main package is %{name}.
 %patch4 -p1 -b .autosieve.orig
 %endif
 %if %{build_rmquota}
-%patch5 -p1 -b .rmquota.orig
+%patch5 -p1 -b .rmquota.orig <- this patch is broken and won't apply
 %endif
 
 %patch6 -p1 -b .plaintext.orig
-%patch7 -p1 -b .64bit-fixes.orig
 
 # (oe) for kolab2: Patch to support virtdomains: ldap (parse domain from "email" field an LDAP user entry)
 %if %{build_virtualdomains_in_ldap}
 %patch8 -p1 -b .kolab-ldap.orig
 %endif
-# (oe) for kolab2: Allow for custom annotation
-%patch9 -p1 -b .annotate.orig
 %if %{with_ldap}
 %patch10 -p1 -b .ptloader.orig
 %endif
 %patch11 -p1 -b .secprops.orig
-%patch12 -p1 -b .format_not_a_string_literal_and_no_format_arguments.orig
 
-%patch13 -p1 -b .getrlimit.orig
-%patch14 -p1 -b .skiplist_verbosity.orig
-%patch15 -p1 -b .statuscache_verbosity.orig
-%patch16 -p1 -b .user_deny_verbosity.orig
-
-%patch17 -p1 -b .mancyrusdb.orig
-%patch18 -p1 -b .make_md5_sha1_dirs.orig
 %patch19 -p1 -b .mkimap.orig
 %patch21 -p1 -b .sieve_port.orig
-%patch22 -p1 -b .db51
-%patch23 -p0 -b .perl5.14
+
+# fedora patches
+%patch100 -p1 -b .flock
+%patch101 -p1 -b .authid_normalize
+%patch102 -p1 -b .debugopt
 
 ## Extra documentation
 mkdir -p extradocs
@@ -294,16 +281,13 @@ for i in %{SOURCE2} %{SOURCE4} %{SOURCE19} ; do
   cp $i extradocs
 done 
 
-## remove cvs file
-rm -f doc/text/.cvsignore
-
 ## regenerate html man pages
 pushd man
-for mp in *[1-8] ; do groff -m man -T html $mp > ../doc/man/$mp.html ; done
+    for mp in *[1-8] ; do groff -m man -T html $mp > ../doc/man/$mp.html ; done
 popd
 
 # fix build under mdx8.2
-perl -ni -e "print unless /^AC_PREREQ/" configure.in
+#perl -ni -e "print unless /^AC_PREREQ/" configure.in
 
 install -m 0644 %{SOURCE8} cyrus-imapd.pamd
 
@@ -370,20 +354,20 @@ export andrew_cv_runpath_switch=none
 
 make clean
 # no parallel make - 2.3.10
-make
+%make
 
 # Modify docs master --> cyrus-master
 pushd man
-  perl -pi -e "s#master\(8\)#cyrus-master(8)#" `ls *5 *8`
-  cd ../doc
-  perl -pi -e "s#master#cyrus-master#g;" man.html
-  cd man
-  perl -pi -e "s#master\(8\)#cyrus-master(8)#;" `ls *html`
+    perl -pi -e "s#master\(8\)#cyrus-master(8)#" `ls *5 *8`
+    cd ../doc
+    perl -pi -e "s#master#cyrus-master#g;" man.html
+    cd man
+    perl -pi -e "s#master\(8\)#cyrus-master(8)#;" `ls *html`
 popd
 
 # Modify path in perl scripts
 pushd perl/imap/examples
-  perl -pi -e "s#/usr/local/bin/perl#%{__perl}#" `find . -type f -name "*.pl"`
+    perl -pi -e "s#/usr/local/bin/perl#%{__perl}#" `find . -type f -name "*.pl"`
 popd
 
 # Cleanup of doc dir
@@ -398,7 +382,6 @@ rm -f doc/text/htmlstrip.c
 perl -pi -e "s#/var/imap#%{_vardata}#" %{_confdir}/*.conf
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 
 %makeinstall_std
 %makeinstall_std -C man
@@ -408,31 +391,31 @@ perl -pi -e "s#/var/imap#%{_vardata}#" %{_confdir}/*.conf
 
 # Install tools
 for tool in dohash masssievec mkimap mknewsgroups rehash translatesieve undohash  upgradesieve ; do
-	 test -f tools/${tool} && %{__install} -m 755 tools/${tool} %{buildroot}%{_cyrexecdir}/
+    test -f tools/${tool} && %{__install} -m 755 tools/${tool} %{buildroot}%{_cyrexecdir}/
 done
 %{__install} -m 755 %{SOURCE13} %{buildroot}%{_cyrexecdir}/imapcreate
 
 # Create directories
 %{__install} -d \
 %if %{with_snmp}
-        %{buildroot}%{_datadir}/snmp/mibs \
+    %{buildroot}%{_datadir}/snmp/mibs \
 %endif
 %if %{with_ldap}
-        %{buildroot}%{_vardata}/ptclient/ \
+    %{buildroot}%{_vardata}/ptclient/ \
 %endif
-	%{buildroot}%{_initrddir} \
-	%{buildroot}%{_sysconfdir}/{pam.d,sysconfig,cron.daily} \
-	%{buildroot}%{_libdir}/sasl \
-	%{buildroot}%{_bindir} \
-	%{buildroot}%{_spooldata}/stage. \
-	%{buildroot}%{_vardata}/{user,quota,proc,log,msg,socket,db,sieve,rpm,backup}
+    %{buildroot}%{_sysconfdir}/{pam.d,sysconfig,cron.daily} \
+    %{buildroot}/lib/systemd/system \
+    %{buildroot}%{_libdir}/sasl \
+    %{buildroot}%{_bindir} \
+    %{buildroot}%{_spooldata}/stage. \
+    %{buildroot}%{_vardata}/{user,quota,proc,log,msg,socket,db,sieve,rpm,backup}
 
 # Install additional files
-%{__install} -m 755 %{SOURCE15}   %{buildroot}%{_cyrexecdir}/cvt_cyrusdb_all
+%{__install} -m 755 %{SOURCE15} %{buildroot}%{_cyrexecdir}/cvt_cyrusdb_all
 
 # Install config files
 %{__install} -m 644 %{_cyrusconf} %{buildroot}%{_sysconfdir}/cyrus.conf
-%{__install} -m 644 %{SOURCE6}    %{buildroot}%{_sysconfdir}/imapd.conf
+%{__install} -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/imapd.conf
 
 %{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/pop
 %{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/imap
@@ -442,15 +425,17 @@ done
 %{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/nntp
 %{__install} -m 644 cyrus-imapd.pamd %{buildroot}%{_sysconfdir}/pam.d/csync
 
-%{__install} -m 644 %{SOURCE12}   %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-%{__install} -m 755 %{SOURCE11}   %{buildroot}%{_initrddir}/%{name}
-%{__install} -m 755 %{SOURCE20}   %{buildroot}%{_sysconfdir}/cron.daily/%{name}
+%{__install} -m 644 %{SOURCE12} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+%{__install} -m 755 %{SOURCE20} %{buildroot}%{_sysconfdir}/cron.daily/%{name}
+%{__install} -m 644 %{SOURCE22} %{buildroot}/lib/systemd/system/cyrus-imapd.service
+%{__install} -m 755 %{SOURCE23} %{buildroot}%{_cyrexecdir}/cyr_systemd_helper
 
 %if %{with_snmp}
 # Install snmp mibs
 %{__install} -m 644 master/CYRUS-MASTER.mib %{buildroot}%{_datadir}/snmp/mibs/CYRUS-MASTER-MIB.txt
 %{__install} -m 644 %{SOURCE21} %{buildroot}%{_datadir}/snmp/mibs/CMU-MIB.txt
 %endif
+
 
 # Install README.RPM
 %{__install} -m 644 %{SOURCE14} README.RPM
@@ -499,7 +484,7 @@ echo "# placeholder" > %{buildroot}/var/lib/net-snmp/cyrusMaster.conf
 %endif
 
 # cleanup
-find %{buildroot}%{perl_vendorarch} -name "*.annotate" | xargs rm -f
+find %{buildroot}%{perl_vendorarch} -name "*.orig" | xargs rm -f
 
 %pre
 # Create 'cyrus' user on target host
@@ -534,21 +519,20 @@ chown %{_cyrususer}:%{_cyrusgroup} /etc/pki/tls/private/cyrus-imapd.pem
 
 # Force synchronous updates only on ext2 filesystems
 # Note: This will slow down user creation for 10.000+ users!
-for i in %{_vardata}/{user,quota} %{_spooldata}
-do
-	if [ `find $i -maxdepth 0 -printf %F` = "ext2" ]; then
-		chattr -R +S $i 2>/dev/null
-	fi
+for i in %{_vardata}/{user,quota} %{_spooldata}; do
+    if [ `find $i -maxdepth 0 -printf %F` = "ext2" ]; then
+	chattr -R +S $i 2>/dev/null
+    fi
 done
 
 # Add sieve service if necessary
 if ! grep -q ^sieve %{_sysconfdir}/services; then
-	echo -e 'sieve\t\t2000/tcp\t\t\t# Sieve mail filter daemon' >> %{_sysconfdir}/services
+    echo -e 'sieve\t\t2000/tcp\t\t\t# Sieve mail filter daemon' >> %{_sysconfdir}/services
 fi
 
 # Add lmtp service if necessary
 if ! grep -q ^lmtp %{_sysconfdir}/services; then
-	echo -e 'lmtp\t\t2003/tcp\t\t\t# Local mail delivery protocol (rfc2033)' >> %{_sysconfdir}/services
+    echo -e 'lmtp\t\t2003/tcp\t\t\t# Local mail delivery protocol (rfc2033)' >> %{_sysconfdir}/services
 fi
 
 # upgrade from previous versions with compiled in database backends
@@ -556,7 +540,7 @@ rm -f %{_vardata}/rpm/db.cfg.cache 2> /dev/null
 
 # "ctl_deliver -E" is deprecated, now is "cyr_expire -E"
 if grep -q "ctl_deliver *-E" %{_sysconfdir}/cyrus.conf ; then
-  perl -pi -e "s/ctl_deliver *-E/cyr_expire -E/" %{_sysconfdir}/cyrus.conf
+    perl -pi -e "s/ctl_deliver *-E/cyr_expire -E/" %{_sysconfdir}/cyrus.conf
 fi
 # compile to byte code sieve scripts on upgrade
 # masssievec needs to run:
@@ -564,50 +548,53 @@ fi
 # - upgrading from 2.2.0 since the bytecode has changed
 # - upgrading from 2.2.1 since the bytecode has changed
 if [ $1 != 1 ] ; then 
-  if [ -f %{_vardata}/rpm/version ] ; then
-    oldversion=`cat %{_vardata}/rpm/version`
-    if [ "$oldversion" = "2.2.0" -o "$oldversion" = "2.2.1" ] ; then
-      compile_needed=1
-    else
-      compile_needed=0
+    if [ -f %{_vardata}/rpm/version ] ; then
+	oldversion=`cat %{_vardata}/rpm/version`
+	    if [ "$oldversion" = "2.2.0" -o "$oldversion" = "2.2.1" ] ; then
+		compile_needed=1
+	    else
+		compile_needed=0
+	    fi
+	else
+	    # versions prior to 2.2.x didn't write the file
+	    ompile_needed=1
     fi
-  else
-    # versions prior to 2.2.x didn't write the file
-    compile_needed=1
-  fi
-  if [ $compile_needed = 1 ] ; then
-    echo "compiling sieve scripts"
-    su cyrus -c "%{_cyrexecdir}/masssievec %{_cyrexecdir}/sievec"
-  fi
+    if [ $compile_needed = 1 ] ; then
+	echo "compiling sieve scripts"
+	su cyrus -c "%{_cyrexecdir}/masssievec %{_cyrexecdir}/sievec"
+    fi
 fi
 # cache the installed version for next upgrade
 echo %{version} > %{_vardata}/rpm/version
 
-%_post_service %{name}
+/bin/systemctl daemon-reload > /dev/null 2>&1 :
 
 %preun
-%_preun_service %{name}
 if [ $1 = 0 ]; then
-	/usr/sbin/userdel %{_cyrususer} 2> /dev/null || :
+    # Package removal, not upgrade
+    /bin/systemctl disable cyrus-imapd.service >/dev/null 2>&1 || :
+    /bin/systemctl stop cyrus-imapd.service > /dev/null 2>&1 || :
+    /usr/sbin/userdel %{_cyrususer} 2> /dev/null || :
 %if %{SASLGROUP}
-	if [ "`grep ^%{_saslgroup}: %{_sysconfdir}/group | cut -d: -f4-`" = "" ]; then
-		/usr/sbin/groupdel %{_saslgroup} 2> /dev/null || :
-	fi
+if [ "`grep ^%{_saslgroup}: %{_sysconfdir}/group | cut -d: -f4-`" = "" ]; then
+    /usr/sbin/groupdel %{_saslgroup} 2> /dev/null || :
+fi
 %endif
-	rm -f %{_vardata}/socket/lmtp 2> /dev/null
-	rm -f %{_vardata}/rpm/version 2> /dev/null
+    rm -f %{_vardata}/socket/lmtp 2> /dev/null
+    rm -f %{_vardata}/rpm/version 2> /dev/null
 fi
 
-%triggerin -- %{name} < 2.0.0
-#To avoid automatic restart of the daemon when upgrading from versions
-#1.x.x of Cyrus IMAPd in rpm form, be sure the old daemon is stopped
-/sbin/service %{name} stop >/dev/null 2>&1 || :
+%postun
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+if [ $1 -ge 1 ] ; then
+    # Package upgrade, not uninstall
+    /bin/systemctl try-restart cyrus-imapd.service >/dev/null 2>&1 || :
+fi
 
-%clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+%triggerun -- cyrus-imapd < 2.4.13-1
+/sbin/chkconfig --level 3 cyrus-imapd && /bin/systemctl enable cyrus-imapd.service >/dev/null 2>&1 || :
 
 %files
-%defattr(-,root,root)
 %doc doc/* extradocs/*
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/*.conf
 %attr(0755,root,root) %config(noreplace) %{_initrddir}/%{name}
@@ -617,6 +604,7 @@ fi
 %attr(0644,root,root) %config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/sieve
 %attr(0644,root,root) %config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/lmtp
 %attr(0755,root,root) %config(noreplace) %{_sysconfdir}/cron.daily/%{name}
+/lib/systemd/system/cyrus-imapd.service
 %attr(0755,root,root) %dir %{_cyrexecdir}
 %attr(0755,root,root) %{_cyrexecdir}/arbitron
 %attr(0755,root,root) %{_cyrexecdir}/chk_cyrus
@@ -629,7 +617,10 @@ fi
 %attr(0755,root,root) %{_cyrexecdir}/cyr_df
 %attr(0755,root,root) %{_cyrexecdir}/cyrdump
 %attr(0755,root,root) %{_cyrexecdir}/cyr_expire
+%attr(0755,root,root) %{_cyrexecdir}/cyr_sequence
 %attr(0755,root,root) %{_cyrexecdir}/cyr_synclog
+%attr(0755,root,root) %{_cyrexecdir}/cyr_systemd_helper
+%attr(0755,root,root) %{_cyrexecdir}/cyr_userseen
 %attr(0755,root,root) %{_cyrexecdir}/cyrus-master
 %attr(0755,root,root) %{_cyrexecdir}/dohash
 %attr(0755,root,root) %{_cyrexecdir}/fud
@@ -707,8 +698,6 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/imapd.8*
 %attr(0644,root,root) %{_mandir}/man8/ipurge.8*
 %attr(0644,root,root) %{_mandir}/man8/lmtpd.8*
-%attr(0644,root,root) %{_mandir}/man8/make_md5.8*
-%attr(0644,root,root) %{_mandir}/man8/make_sha1.8*
 %attr(0644,root,root) %{_mandir}/man8/mbexamine.8*
 %attr(0644,root,root) %{_mandir}/man8/mbpath.8*
 %attr(0644,root,root) %{_mandir}/man8/notifyd.8*
@@ -731,7 +720,6 @@ fi
 %endif
 
 %files murder
-%defattr(-,root,root)
 %doc doc/text/install-murder
 %config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/mupdate
 %config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/csync
@@ -741,7 +729,6 @@ fi
 %attr(0755,root,root) %{_cyrexecdir}/proxyd
 
 %files nntp
-%defattr(-,root,root)
 %doc doc/text/install-netnews
 %config(noreplace) %verify(not size,not md5) %{_sysconfdir}/pam.d/nntp
 %attr(0755,root,root) %{_cyrexecdir}/fetchnews
@@ -750,20 +737,17 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/fetchnews.8*
 
 %files devel
-%defattr(-,root,root)
 %{_includedir}/cyrus
 %{_libdir}/lib*.a
 %attr(0644,root,root) %{_mandir}/man3/imclient.3*
 
 %files -n perl-Cyrus
-%defattr(-,root,root)
 %doc perl/imap/README perl/imap/Changes perl/imap/examples
 %{perl_vendorarch}/auto/Cyrus
 %{perl_vendorarch}/Cyrus
 %attr(0644,root,root) %{_mandir}/man3/Cyrus*
 
 %files utils
-%defattr(-,root,root)
 %attr(0755,root,root) %{_cyrexecdir}/cyradm
 %attr(0755,root,root) %{_cyrexecdir}/imtest
 %attr(0755,root,root) %{_cyrexecdir}/imapcreate
