@@ -354,7 +354,7 @@ export andrew_cv_runpath_switch=none
 
 make clean
 # no parallel make - 2.3.10
-%make
+make
 
 # Modify docs master --> cyrus-master
 pushd man
