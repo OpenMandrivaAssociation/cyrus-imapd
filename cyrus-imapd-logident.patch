@@ -1,0 +1,11 @@
+--- master/master.c.orig	2003-11-24 00:15:21.000000000 +0100
++++ master/master.c	2003-11-24 00:15:32.000000000 +0100
+@@ -1680,7 +1680,7 @@
+ 	}
+     }
+ 
+-    masterconf_init("master", alt_config);
++    masterconf_init("cyrus-master", alt_config);
+ 
+     /* zero out the children table */
+     memset(&ctable, 0, sizeof(struct centry *) * child_table_size);

@@ -1,0 +1,15 @@
+cmu.mib
+cyr_systemd_helper
+cyrus-imapd-2.4.13.tar.gz
+cyrus-imapd-2.4.13.tar.gz.sig
+cyrus-imapd.cron-daily
+cyrus-imapd.cvt_cyrusdb_all
+cyrus-imapd.imap-2.1.x-conf
+cyrus-imapd.pamd
+cyrus-imapd-procmail+cyrus.mc
+cyrus-imapd.README.RPM
+cyrus-imapd.service
+cyrus-imapd.sysconfig
+cyrus-procmailrc
+cyrus-user-procmailrc.template
+imapcreate.pl

@@ -1,0 +1,22 @@
+--- perl/Makefile.in.orig	2003-11-23 23:40:20.000000000 +0100
++++ perl/Makefile.in	2003-11-23 23:41:49.000000000 +0100
+@@ -82,7 +82,7 @@
+ 			   BDB_LIB="$(BDB_LIB)" BDB_INC="$(BDB_INC)" \
+ 			   OPENSSL_LIB="$(OPENSSL_LIB)" OPENSSL_INC="$(OPENSSL_INC)" \
+ 			   SASL_LIB="$(SASL_LIB)" SASL_INC="$(SASL_INC)" CC="$(CC)" \
+-			     $(PERL) Makefile.PL PREFIX=$(prefix); \
++			     $(PERL) Makefile.PL PREFIX=$(prefix) INSTALLDIRS=vendor; \
+ 			fi; \
+ 			$(MAKE) $(MFLAGS) DESTDIR=$(DESTDIR) all) || exit 1; \
+ 	done
+--- perl/sieve/Makefile.in.orig	2003-11-23 23:57:41.000000000 +0100
++++ perl/sieve/Makefile.in	2003-11-23 23:58:56.000000000 +0100
+@@ -84,7 +84,7 @@
+ 			   BDB_LIB="$(BDB_LIB)" BDB_INC="$(BDB_INC)" \
+ 			   OPENSSL_LIB="$(OPENSSL_LIB)" OPENSSL_INC="$(OPENSSL_INC)" \
+ 			   SASL_LIB="$(SASL_LIB)" SASL_INC="$(SASL_INC)" CC="$(CC)" \
+-			     $(PERL) Makefile.PL PREFIX=$(prefix); \
++			     $(PERL) Makefile.PL PREFIX=$(prefix) INSTALLDIRS=vendor; \
+ 			fi; \
+ 			$(MAKE) $(MFLAGS) DESTDIR=$(DESTDIR) all) || exit 1; \
+ 	done

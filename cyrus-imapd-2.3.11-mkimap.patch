@@ -1,0 +1,10 @@
+--- cyrus-imapd-2.3.11/tools/mkimap.orig	2006-11-30 18:11:25.000000000 +0100
++++ cyrus-imapd-2.3.11/tools/mkimap	2008-02-26 13:09:46.000000000 +0100
+@@ -109,6 +109,7 @@
+ mkdir "msg", 0755 || warn "can't create $d/msg: $!";
+ mkdir "ptclient", 0755 || warn "can't create $d/ptclient: $!";
+ mkdir "sync", 0755 || warn "can't create $d/sync: $!";
++mkdir "rpm", 0755 || warn "can't create $d/rpm: $!";
+ 
+ while ($part = shift @parts) {
+     print "creating $part...\n";
