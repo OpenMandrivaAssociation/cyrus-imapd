@@ -1,0 +1,162 @@
+USER AUTHENTICATION
+
+This rpm has been configured to use saslauthd as the authentication method,
+so you should configure saslauthd (/etc/sysconfig/saslauth) and start it (a
+standard rc script is provided with cyrus-sasl). In its default configuration
+saslauthd will use pam for auhentication.
+You can edit /etc/imapd.conf to use something else instead of saslauthd.
+See the documentation for cyrus-imapd (specifically the install-auth.html
+file) and the documentation for cyrus-sasl.
+
+ADMINISTRATION
+
+System administration should be performed by an administrative user
+(by default is user cyrus), using, i.e.
+
+cyradm --user cyrus localhost
+
+If you haven't done so already, you should set a password for the cyrus 
+user in whatever database you are using to authenticate (see the previous
+section).
+*NEVER* grant administrative privilieges to an account you use normally
+to read email.
+Remember that you have to create mailboxes for your users with cyradm 
+(using the command: "cm user.userid")
+
+
+POSTFIX CONFIGURATION
+
+There are many possible way to configure postfix to deliver mail to cyrus.
+The recommended way is to use the lmtp protocol to talk to the cyrus lmtpd
+unix socket or tcp socket. The proposed configurations are only intended as 
+a starting point, please read the documentation if you need more advanced
+features (e.g. single instance store).
+
+1) simple configuration
+
+if you're not worried that any user in group mail can talk to the lmtp
+socket you can use this configuration:
+
+  1.a) leave /etc/cyrus.conf as delivered by default with an uncommented 
+       line that reads
+       
+         lmtpunix cmd="lmtpd" listen="/var/lib/imap/socket/lmtp" prefork 1
+
+  1.b) edit /etc/postfix/main.cf and add the following line
+  
+          mailbox_transport = lmtp:unix:/var/lib/imap/socket/lmtp
+
+  1.c) add user postfix to group mail
+
+          gpasswd -a postfix mail
+
+  1.d) ONLY FOR MANDRAKE 9.0 AND LATER
+       Starting from mandrake 9.0 postfix comes configured to run lmtp 
+       chrooted.
+       Edit /etc/postfix/master.cf and modify the "lmtp" line to have
+       a "n" in the fifth column:
+
+         lmtp   unix  -   -  n  -  - lmtp
+
+2) secure configuration
+
+if you want only postfix to be able to talk to the lmtp socket you can use
+this configuration:
+
+  2.a) create a directory owned by cyrus, group postfix,
+       with permission 0750, e.g.
+
+          mkdir /var/lib/cyrus_socket
+          chown cyrus.postfix /var/lib/cyrus_socket
+          chmod 0750 /var/lib/cyrus_socket
+
+       ***NOTE FOR MANDRAKE 9.0 AND LATER*** 
+       since postfix comes configured by default to run lmtp chrooted,
+       you either have to modify postfix configuration (see 1.d) or put
+       the directory under /var/spool/postfix, e.g:
+       /var/spool/postfix/cyrus_socket 
+
+  2.b) edit /etc/cyrus.conf and modify the lmtpunix line to use
+       a socket in the previously created directory
+
+          lmtpunix cmd="lmtpd" listen="/var/lib/cyrus_socket/lmtp" prefork 1
+
+  2.c) edit /etc/postfix/main.cf and add the following line
+  
+          mailbox_transport = lmtp:unix:/var/lib/cyrus_socket/lmtp
+       
+       In case you're using mandrake 9.0 or later and lmtp is running chrooted
+       specify a relative path, e.g. if the socket is in 
+
+          /var/spool/postfix/cyrus_socket 
+
+       use
+ 
+         mailbox_transport = lmtp:unix:cyrus_socket/lmtp
+
+3) flexible and secure
+
+If you want other users besides postfix to access the lmtp socket you can
+use a variant of method 2. Just create a directory like in step 2.a for each
+user you want to access the lmtp socket and then add a lmtpunix line to
+/etc/cyrus.conf for each directory (just be sure to change lmtpunix to
+something else, e.g. lmtpunix1, lmtpunix2, etc.)
+
+
+4) using lmtp tcp sockets instead of unix sockets 
+   (contributed by Luca Berra <bluca@comedia.it>)
+
+This way you don't have to take anything outside the postfix chroot jail and
+it's even possible to run postfix on a different host than cyrus-imapd.
+
+  4.a) edit /etc/postfix/main.cf and add the following line
+
+          mailbox_transport = lmtp:<host where cyrus is running>
+
+  4.b) in /etc/cyrus.conf comment the line:
+
+         lmtpunix cmd="lmtpd" listen="/var/lib/cyrus/socket/lmtp" prefork=1
+
+       uncomment:
+
+         lmtp cmd="lmtpd" listen="lmtp" prefork=0 
+
+       (change the number after "prefork" to suit your needs)
+
+  4.c) create a user "cyruslmtp" with a valid (for cyrus) password 
+
+  4.d) add this line to /etc/imapd.conf
+
+        lmtp_admins: cyruslmtp  
+       
+  4.e) create a file /etc/postfix/lmtp_sasl_pass owned by root and mode
+       600 containing the line
+        
+         <host where cyrus is running><TAB>cyruslmtp:<password for cyruslmtp> 
+
+  4.f) run:
+
+         postmap /etc/postfix/lmtp_sasl_pass
+         postconf -e "lmtp_sasl_auth_enable = yes"
+         postconf -e "lmtp_sasl_password_maps = hash:/etc/postfix/lmtp_sasl_pass"
+         postconf -e "lmtp_sasl_security_options = noanonymous"
+
+SNMP logging
+
+(taken from debian's package documentation, written by
+Henrique de Moraes Holschuh <hmh@debian.org>)
+
+cyrus-master is an agentx SNMP subagent, and it can interface to a agentx SNMP
+master.  It will export data at OID .1.3.6.1.4.1.3.6.1 (cyrusMasterMIB).
+
+The snmp daemon (package ucd-snmp or net-snmp) is NOT configured to work
+as agentx master agent by default -- you have to do that manually,
+by adding "master agentx" to the /etc/snmp/snmpd.conf file.
+
+cyrus-master will register with the snmp agentx master when it is started,
+so if the snmp master is restarted after cyrmaster, it will not forward
+the snmp requests to cyrmaster anymore.  Check your system for any cron
+scripts that might be restarting the snmp process if that happens.
+
+See CYRUS-MASTER-MIB.txt in /usr/share/snmp/mibs for more details.
+

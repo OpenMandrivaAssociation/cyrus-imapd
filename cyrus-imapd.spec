@@ -752,3 +752,397 @@ fi
 %attr(0755,root,root) %{_cyrexecdir}/imapcreate
 %attr(0755,root,root) %{_bindir}/*
 %attr(0644,root,root) %{_mandir}/man1/*
+
+
+%changelog
+* Fri Mar 09 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 2.4.13-2
++ Revision: 783589
+- rebuild
+
+* Thu Jan 26 2012 Oden Eriksson <oeriksson@mandriva.com> 2.4.13-1
++ Revision: 769080
+- still parallel make don't work in the build system, oh well...
+- eh, forgot one thing there :-)
+- 2.4.13
+- rediffed some patches
+- dropped obsolete patches (some was finally applied upstream and some isn't needed anymore)
+- dropped the anti verbosity patches, use new debug config option instead
+- added some of the fedora patches (P100,P101,P102)
+- added systemd support (fedora)
+- added new'ish cyrus-imapd.cvt_cyrusdb_all from fedora (S15)
+- disable the rmquota patch as it won't apply cleanly (P5)
+- various fixes
+
+* Mon Jan 23 2012 Oden Eriksson <oeriksson@mandriva.com> 2.3.18-2
++ Revision: 767068
+- it won't build with -fPIE
+- remove rpath (not fixed for the perl modules)
+- remove the versioned bdb magic, it will use the latest one now
+- more perl-5.14.2 fixes
+- P23: fix build with perl-5.14.x (debian)
+- fix deps
+- fix deps
+- rebuilt for perl-5.14.2
+
+* Fri Oct 14 2011 Oden Eriksson <oeriksson@mandriva.com> 2.3.18-1
++ Revision: 704699
+- fix deps
+- 2.3.18
+- drop upstream added patches
+- cleanup a little bit
+
+* Mon Jul 18 2011 Oden Eriksson <oeriksson@mandriva.com> 2.3.16-8
++ Revision: 690288
+- rebuilt against new net-snmp libs
+
+* Tue May 24 2011 Oden Eriksson <oeriksson@mandriva.com> 2.3.16-7
++ Revision: 678108
+- bump release (weird!)
+- P23: security fix for CVE-2011-1926
+
+* Mon Apr 11 2011 Funda Wang <fwang@mandriva.org> 2.3.16-5
++ Revision: 652476
+- add debian patch to build with db5.1
+
+* Thu Mar 17 2011 Oden Eriksson <oeriksson@mandriva.com> 2.3.16-4
++ Revision: 645742
+- relink against libmysqlclient.so.18
+
+* Mon Mar 14 2011 Thomas Spuhler <tspuhler@mandriva.org> 2.3.16-3
++ Revision: 644463
+- added -p0 to line %%patch1 -b .mdk9.0perl.orig to make patch work
+- rebuild
+
+* Tue Oct 12 2010 Funda Wang <fwang@mandriva.org> 2.3.16-2mdv2011.0
++ Revision: 585010
+- rebuild
+
+* Sun Oct 03 2010 Luca Berra <bluca@mandriva.org> 2.3.16-1mdv2011.0
++ Revision: 582777
+- New version 2.3.16
+  updated autosieve and autocreate patches
+  removed Kolab imapd-annotate patch (merged upstream)
+  reworked Kolab ldap patch
+  reworked spec file (renumbered patches, removed compat macros)
+  remove skiplist magic (it is already known to file)
+  move ssl certificates from /etc/ssl to /etc/pki/tls
+  add verbosity patches from simon matter
+  add other misc patcges from simon
+  fix cron daily script
+
+* Sat Sep 11 2010 Thomas Spuhler <tspuhler@mandriva.org> 2.3.15-10mdv2011.0
++ Revision: 577601
+- rebuilt with perl 5.12.2
+
+* Sun Aug 01 2010 Luca Berra <bluca@mandriva.org> 2.3.15-9mdv2011.0
++ Revision: 564212
+- rebuild for perl 5.12.1
+
+* Wed Jul 21 2010 Jérôme Quelin <jquelin@mandriva.org> 2.3.15-8mdv2011.0
++ Revision: 556351
+- rebuild for perl 5.12
+
+* Mon Apr 05 2010 Funda Wang <fwang@mandriva.org> 2.3.15-7mdv2010.1
++ Revision: 531738
+- rebuild for new openssl
+
+* Fri Feb 26 2010 Oden Eriksson <oeriksson@mandriva.com> 2.3.15-6mdv2010.1
++ Revision: 511557
+- rebuilt against openssl-0.9.8m
+
+* Sat Jan 02 2010 Oden Eriksson <oeriksson@mandriva.com> 2.3.15-5mdv2010.1
++ Revision: 484970
+- rebuild
+- really link against bdb 4.8
+
+* Fri Jan 01 2010 Funda Wang <fwang@mandriva.org> 2.3.15-4mdv2010.1
++ Revision: 484838
+- rebuild for db 4.8
+
+* Fri Jan 01 2010 Oden Eriksson <oeriksson@mandriva.com> 2.3.15-3mdv2010.1
++ Revision: 484744
+- rebuilt against bdb 4.8
+
+* Thu Oct 15 2009 Oden Eriksson <oeriksson@mandriva.com> 2.3.15-2mdv2010.0
++ Revision: 457611
+- rebuilt against new net-snmp libs
+
+* Thu Sep 10 2009 Oden Eriksson <oeriksson@mandriva.com> 2.3.15-1mdv2010.0
++ Revision: 436545
+- 2.3.15
+- rediffed P11,P23
+- fixed linkage (P27)
+
+* Sun Aug 09 2009 Oden Eriksson <oeriksson@mandriva.com> 2.3.14-2mdv2010.0
++ Revision: 413308
+- rebuild
+
+* Wed Apr 08 2009 Oden Eriksson <oeriksson@mandriva.com> 2.3.14-1mdv2009.1
++ Revision: 365126
+- 2.3.14
+- new autosieve and autocreate patches (P11,P13)
+- rediffed the string format patch and added one more fix (P26)
+
+* Tue Dec 16 2008 Oden Eriksson <oeriksson@mandriva.com> 2.3.13-1mdv2009.1
++ Revision: 314815
+- 2.3.13
+- really link against bdb-4.7 libs
+- new upstream patches; P11,P13
+- rediffed P17,P22,P23
+- added P26 to make it build with -Werror=format-security (thanks pixel)
+- enable the new mysql, postgresql and sqlite backends (enabled per default for now)
+
+* Mon Dec 15 2008 Oden Eriksson <oeriksson@mandriva.com> 2.3.12-0.p2.5mdv2009.1
++ Revision: 314524
+- rediffed fuzzy patches
+- rebuilt against db4.7
+
+* Tue Sep 16 2008 Luca Berra <bluca@mandriva.org> 2.3.12-0.p2.4mdv2009.0
++ Revision: 285186
+- enable building of pts/ldap
+- fix a problem with ptloader and sasl binds
+
+* Thu Jul 17 2008 Oden Eriksson <oeriksson@mandriva.com> 2.3.12-0.p2.2mdv2009.0
++ Revision: 237677
+- rebuild
+
+* Sun May 18 2008 Oden Eriksson <oeriksson@mandriva.com> 2.3.12-0.p2.1mdv2009.0
++ Revision: 208742
+- fix buildroot
+- 2.3.12p2
+- new P11,P13
+- rediffed P17,P22
+
+* Thu Apr 17 2008 Oden Eriksson <oeriksson@mandriva.com> 2.3.11-7mdv2009.0
++ Revision: 195128
+- revert the "conform to the 2008 specs (don't start the services per
+  default)" changes and let this be handled some other way...
+
+* Wed Mar 26 2008 Oden Eriksson <oeriksson@mandriva.com> 2.3.11-6mdv2008.1
++ Revision: 190297
+- don't start it per default
+
+* Sat Feb 23 2008 Oden Eriksson <oeriksson@mandriva.com> 2.3.11-5mdv2008.1
++ Revision: 174079
+- make it backportable
+
+* Wed Jan 23 2008 Thierry Vignaud <tv@mandriva.org> 2.3.11-4mdv2008.1
++ Revision: 157244
+- rebuild with fixed %%serverbuild macro
+
+* Mon Jan 14 2008 Pixel <pixel@mandriva.com> 2.3.11-3mdv2008.1
++ Revision: 151350
+- rebuild for perl-5.10.0
+
+  + Olivier Blin <blino@mandriva.org>
+    - restore BuildRoot
+
+* Wed Jan 02 2008 Andreas Hasenack <andreas@mandriva.com> 2.3.11-2mdv2008.1
++ Revision: 140374
+- updated to version 2.3.11
+
+* Fri Dec 21 2007 Oden Eriksson <oeriksson@mandriva.com> 2.3.10-2mdv2008.1
++ Revision: 136258
+- rebuilt against bdb 4.6.x libs
+- rebuilt against openldap-2.4.7 libs
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill re-definition of %%buildroot on Pixel's request
+    - s/mandrake/mandriva/
+
+* Mon Nov 05 2007 Andreas Hasenack <andreas@mandriva.com> 2.3.10-1mdv2008.1
++ Revision: 106031
+- updated to version 2.3.10
+- dropped db patch, same effect can be obtained with a configure option
+- updated rmquota and auto* patches, redid cyradm_annotate one
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill file require on chkconfig
+
+* Wed Aug 08 2007 Oden Eriksson <oeriksson@mandriva.com> 2.3.8-4mdv2008.0
++ Revision: 60200
+- rebuilt against new net-snmp libs
+
+* Wed Jun 27 2007 Andreas Hasenack <andreas@mandriva.com> 2.3.8-3mdv2008.0
++ Revision: 45145
+- rebuild with new serverbuild macro (-fstack-protector-all)
+
+* Fri Jun 22 2007 Andreas Hasenack <andreas@mandriva.com> 2.3.8-2mdv2008.0
++ Revision: 43136
+- using %%serverbuild macro
+
+* Fri Jun 01 2007 Oden Eriksson <oeriksson@mandriva.com> 2.3.8-1mdv2008.0
++ Revision: 33602
+- fix deps (net-snmp-mibs)
+- add the /var/lib/net-snmp/cyrusMaster.conf file
+
+* Mon May 28 2007 Oden Eriksson <oeriksson@mandriva.com> 2.3.8-0mdv2008.0
++ Revision: 32052
+- 2.3.8
+- dropped upstream patches; P9,P26,P27
+- rediffed P17
+- new upstream P11,P13,P14
+- new P22,P23 (from gentoo)
+- misc spec file fixes
+
+
+* Wed Aug 16 2006 Andreas Hasenack <andreas@mandriva.com> 2.2.13-4mdv2007.0
++ Revision: 56199
+- added parallel init information to the initscript (closes #24222)
+
+* Sun Aug 06 2006 Andreas Hasenack <andreas@mandriva.com> 2.2.13-3mdv2007.0
++ Revision: 53022
+- added some commented options to default imapd.conf (#22197)
+- bunzip pam conf files
+- import cyrus-imapd-2.2.13-2mdv2007.0
+
+* Mon Jun 12 2006 Oden Eriksson <oeriksson@mandriva.com> 2.2.13-2mdv2007.0
+- added P27 (#23051)
+
+* Fri Jun 02 2006 Oden Eriksson <oeriksson@mandriva.com> 2.2.13-1mdv2007.0
+- 2.2.13
+- drop upstream patches; P0,P24,P25
+- new P11
+- rediffed patches; P21,P23
+- cleaned up the spec file some
+- make it backportable for older pam (S7,S8)
+
+* Fri May 26 2006 Andreas Hasenack <andreas@mandriva.com> 2.2.12-22mdk
+- added patch from CVS to fix a compatibility issue with sasl-2.1.22 final
+  (imtest was incorrectly relying on a sasl bug that was fixed)
+- removed buildrequires for XFree86-devel, couldn't find anything using it
+
+* Sat May 13 2006 Stefan van der Eijk <stefan@eijk.nu> 2.2.12-21mdk
+- rebuild for sparc
+
+* Tue Apr 18 2006 Andreas Hasenack <andreas@mandriva.com> 2.2.12-20mdk
+- added patch for timsieved, from amal@krasn.ru, to fix
+  "Database handles remain at environment close" errors when using
+  berkeley db for tls sessions
+
+* Fri Mar 24 2006 Andreas Hasenack <andreas@mandriva.com> 2.2.12-19mdk
+- updated auto-* patches
+
+* Wed Jan 04 2006 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-18mdk
+- rebuilt against new net-snmp with new major (10)
+
+* Wed Dec 21 2005 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-17mdk
+- rebuilt against net-snmp that has new major (9)
+
+* Sun Nov 13 2005 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-16mdk
+- rebuilt against openssl-0.9.8a
+
+* Thu Sep 08 2005 Andreas Hasenack <andreas@mandriva.com> 2.2.12-15mdk
+- added patch from wes@umich.edu to avoid an off-by-one error which
+  was causing cyrus to reject messages with long lines. Thanks to 
+  joeghi for supplying a sample message and being patient.
+  (fixes https://bugzilla.andrew.cmu.edu/show_bug.cgi?id=2676)
+
+* Wed Aug 31 2005 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-14mdk
+- rebuilt against new openldap-2.3.6 libs
+
+* Sat Aug 13 2005 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-13mdk
+- added one more annotation patch for kolab2 from the kolab cvs
+
+* Fri Aug 05 2005 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-12mdk
+- revert the lib64 fixes
+
+* Fri Aug 05 2005 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-11mdk
+- /usr/lib/cyrus-imapd is now /usr/lib64/cyrus-imap
+
+* Sat Jul 30 2005 Andreas Hasenack <andreas@mandriva.com> 2.2.12-10mdk
+- enabled virtual domains in ldap by default (needed by Kolab2)
+- moved virtual domains' buildrequires (openldap) outside the nested %%if
+  it was in (otherwise, it would only be required if snmp support was also
+  enabled)
+
+* Sat Jul 23 2005 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-9mdk
+- use a more descriptive build option for virtual domains in ldap (Andreas Hasenack)
+- reworked the virtual domains in ldap patch (Andreas Hasenack)
+
+* Thu Jul 07 2005 Oden Eriksson <oeriksson@mandriva.com> 2.2.12-8mdk
+- added rediffed P21, P22 from the openpkg kolab2 packages
+- added one gcc4 patch by Ondrej Sury
+
+* Sun Mar 20 2005 Oden Eriksson <oden.eriksson@kvikkjokk.net> 2.2.12-7mdk
+- fix #9788, conflicts is in the eyes of the beholder...
+
+* Sat Mar 19 2005 Oden Eriksson <oden.eriksson@kvikkjokk.net> 2.2.12-6mdk
+- only do the recursive chown if not upgrading (Luca Olivetti)
+
+* Thu Mar 17 2005 Oden Eriksson <oden.eriksson@kvikkjokk.net> 2.2.12-5mdk
+- make sure cyrus:mail owns /var/lib/imap 
+  and /var/spool/imap in %%post
+
+* Fri Mar 11 2005 Luca Berra <bluca@vodka.it> 2.2.12-4mdk
+- revert liblm_sensors-devel change, fixed in net-snmp package
+
+* Thu Mar 10 2005 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 2.2.12-3mdk
+- buildrequires: liblm_sensors-devel (cyrus-imapd/master)
+
+* Fri Feb 25 2005 Oden Eriksson <oeriksson@mandrakesoft.com> 2.2.12-2mdk
+- rebuilt against the system bdb (P20)
+
+* Tue Feb 15 2005 Luca Olivetti <luca@olivetti.cjb.net> 2.2.12-1mdk
+- 2.2.12 (bug fix release)
+- ugly compatibility macros for uglier release tag. See
+  http://qa.mandrakesoft.com/twiki/bin/view/Main/DistroSpecificReleaseTag
+- new autocreate and autosievefolder patches
+
+* Thu Jan 13 2005 Luca Olivetti <luca@olivetti.cjb.net> 2.2.10-2mdk
+- drop last digit from release tag
+- fetchnews man page moved to cyrus-imapd-nntp subpackage (conflict with
+  leafnode, thanks to Marek Kruz.el <marek@good.solutions.net.pl>
+- new version of autocreate patch
+- removed last chunk from 64bit fixes patch (the fault was in the
+  previous autocreate patch, not in cyrus proper)
+
+* Wed Nov 24 2004 Luca Olivetti <luca@olivetti.cjb.net> 2.2.10-1mdk
+- 2.2.10 (security fixes)
+- removed failing hunk in 64-bit fixes patch, it shouldn't be necessary
+  anymore
+
+* Wed Oct 27 2004 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 2.2.8-3mdk
+- some 64-bit fixes
+- stick to /usr/lib/cyrus-imapd as _cyrexecdir
+
+* Sun Aug 29 2004 Luca Berra <bluca@vodka.it> 2.2.8-2.mdk
+- rebuild with db-4.2
+
+* Sat Jul 31 2004 Luca Olivetti <luca@olivetti.cjb.net> 2.2.8-1mdk
+- 2.2.8
+
+* Wed Jul 28 2004 Luca Olivetti <luca@olivetti.cjb.net> 2.2.7-1mdk
+- 2.2.7
+- new autocreate,autosievefolder,rmquota patches
+- removed p100 (quota patches from cvs)
+- removed p2 and p3 (man pages fixes, fixed upstream)
+- patch9 (munge8bit) and patch17 (plaintext) no longer patch html manpage
+  (it's less tiresome to regenerate them with groff)
+- removed patch19 (masssievec, fixed upstream)
+- cleanup
+
+* Fri Jul 02 2004 Luca Olivetti <luca@olivetti.cjb.net> 2.2.6-2mdk
+- new imapcreate.pl script
+- added quota patches from cvs
+
+* Thu Jun 24 2004 Luca Olivetti <luca@olivetti.cjb.net> 2.2.6-1mdk
+- 2.2.6
+- changed version detection defines (and now it builds under 10.0 again)
+- new autocreate,autosievefolder,rmquota patches
+- removed patch0 (mandir, fixed upstream)
+- removed patch1 (cflags, fixed upstream)
+- rediffed patch9 (munge8bit)
+- removed patch16 (netsnmp, , upstream package already has net-snmp support)
+- rediffed patch17 (disallow plaintext login with a command line switch)
+- removed patch100 (fix list command for non personal namespaces, fixed
+  upstream)
+- added BuildRequires libelfutils-devel for net-snmp
+
+* Fri Jun 18 2004 Luca Berra <bluca@vodka.it> 2.2.3-7mdk
+- updated p15 and rebuilt against updated net-snmp
+- add 10.1 to recognized versions
+
+* Tue Apr 06 2004 Florin <florin@mandrakesoft.com> 2.2.3.6
+- update to 2.2.3 (merge with the L. Olivetti's work)
+

@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# This file is run on a daily basis to perform a backup of your
+# mailbox list which can be used to recreate mailboxes.db from backup.
+# Restore is done using ctl_mboxlist after uncompressing the file.
+
+ROTATE=6
+
+configdirectory=`awk '/^[[:space:]]*configdirectory:/ {print $NF}' /etc/imapd.conf`
+backdir="${configdirectory}/backup"
+mboxlist="${backdir}/mboxlist"
+
+[ -x /usr/lib/cyrus-imapd/ctl_mboxlist ] || exit 0
+[ -s ${configdirectory}/mailboxes.db ] || exit 0
+
+[ -d ${backdir} ] || mkdir -p ${backdir}
+
+# rotate mailbox lists
+while [ ${ROTATE:-0} -gt 1 ]; do
+	_prev=$(( $ROTATE -1 ))
+	[ -f ${mboxlist}.${_prev}.gz ] && mv -f ${mboxlist}.${_prev}.gz ${mboxlist}.${ROTATE}.gz
+	ROTATE=${_prev}
+done
+[ ${ROTATE:-0} -gt 0 -a -f ${mboxlist}.gz  ] && mv -f ${mboxlist}.gz ${mboxlist}.1.gz
+
+# export mailboxes.db
+su - cyrus -c "umask 077 ; /usr/lib/cyrus-imapd/ctl_mboxlist -d | gzip > ${mboxlist}.gz"
+
+exit 0
+# EOF
