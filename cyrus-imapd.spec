@@ -47,7 +47,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	2.4.13
-Release:	2
+Release:	3
 License:	OSI Approved
 Group:		System/Servers
 URL:		http://cyrusimap.org/
@@ -144,7 +144,7 @@ BuildRequires:	mysql-devel
 BuildRequires:	postgresql-devel
 %endif
 %if %{with_sqlite}
-BuildRequires:	sqlite3-devel
+BuildRequires:	pkgconfig(sqlite3)
 %endif
 
 %if %{SASLGROUP}
