@@ -50,16 +50,16 @@ Version:	2.4.13
 Release:	3
 License:	OSI Approved
 Group:		System/Servers
-URL:		http://cyrusimap.org/
+Url:		http://cyrusimap.org/
 Source0:	ftp://ftp.cyrusimap.org/cyrus-imapd/%{name}-%{version}.tar.gz
-Source1:        ftp://ftp.cyrusimap.org/cyrus-imapd/%{name}-%{version}.tar.gz.sig
+Source1:	ftp://ftp.cyrusimap.org/cyrus-imapd/%{name}-%{version}.tar.gz.sig
 Source2:	cyrus-procmailrc
 Source4:	cyrus-user-procmailrc.template
 Source6:	cyrus-imapd.imap-2.1.x-conf
 Source8:	cyrus-imapd.pamd
 Source12:	cyrus-imapd.sysconfig
-Source13:       http://clement.hermann.free.fr/scripts/Cyrus/imapcreate.pl
-Source14:       cyrus-imapd.README.RPM
+Source13:	http://clement.hermann.free.fr/scripts/Cyrus/imapcreate.pl
+Source14:	cyrus-imapd.README.RPM
 Source15:	cyrus-imapd.cvt_cyrusdb_all
 Source19:	cyrus-imapd-procmail+cyrus.mc
 Source20:	cyrus-imapd.cron-daily
@@ -74,16 +74,16 @@ Patch2:		cyrus-imapd-logident.patch
 # rediffed P3 and P4 comes from http://blog.vx.sk/archives/13-Autocreate-and-autosieve-patches-for-Cyrus-IMAP-Server-24.html
 # Autocreate INBOX patch (http://email.uoa.gr/projects/cyrus/autocreate/)
 #Patch3:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.16/cyrus-imapd-2.3.16-autocreate-0.10-0.diff
-Patch3: cyrus-imapd-2.4.13-autocreate-0.10-0.diff
+Patch3:		cyrus-imapd-2.4.13-autocreate-0.10-0.diff
 # Create on demand folder requested by sieve filter (http://email.uoa.gr/projects/cyrus/autosievefolder/)
 #Patch4:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.16/cyrus-imapd-2.3.16-autosieve-0.6.0.diff
-Patch4: cyrus-imapd-2.4.13-autosieve-0.6.0.diff
+Patch4:		cyrus-imapd-2.4.13-autosieve-0.6.0.diff
 # Remove QUOTA patch (http://email.uoa.gr/projects/cyrus/quota-patches/rmquota/)
-Patch5:	http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
+Patch5:		http://email.uoa.gr/download/cyrus/cyrus-imapd-2.3.9/cyrus-imapd-2.3.9-rmquota-0.5-0.diff
 # command line switch to disallow plaintext login
-Patch6:	cyrus-imapd-2.4.13-plaintext.diff
+Patch6:		cyrus-imapd-2.4.13-plaintext.diff
 # (oe) for kolab2: Patch to support virtdomains: ldap (parse domain from "email" field an LDAP user entry)
-Patch8:	cyrus-imapd-kolab-ldap.diff
+Patch8:		cyrus-imapd-kolab-ldap.diff
 # (bluca) add ptloader to cyrus.conf 
 Patch10:	cyrus-imapd-ptloader-conf.diff
 # (bluca) fix LDAP_OPT_X_SASL_SECPROPS error in ptloader
@@ -92,10 +92,10 @@ Patch11:	cyrus-imapd-ptloader-secprops.diff
 Patch19:	cyrus-imapd-2.3.11-mkimap.patch
 Patch21:	cyrus-imapd-2.3.16-sieve_port.patch
 # fedora patches
-Patch100: http://www.oakton.edu/~jwade/cyrus/cyrus-imapd-2.1.3/cyrus-imapd-2.1.3-flock.patch
-Patch101: cyrus-imapd-2.3.1-authid_normalize.patch
+Patch100:	http://www.oakton.edu/~jwade/cyrus/cyrus-imapd-2.1.3/cyrus-imapd-2.1.3-flock.patch
+Patch101:	cyrus-imapd-2.3.1-authid_normalize.patch
 # for c-i <= 2.4.12
-Patch102: cyrus-imapd-2.4.12-debugopt.patch
+Patch102:	cyrus-imapd-2.4.12-debugopt.patch
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -119,7 +119,7 @@ BuildRequires:	db-devel
 BuildRequires:	ext2fs-devel
 BuildRequires:	flex
 BuildRequires:	groff >= 1.15-8
-BuildRequires:	libsasl-devel >= 2.1.15
+BuildRequires:	sasl-devel >= 2.1.15
 BuildRequires:	openssl-devel
 BuildRequires:	pcre-devel
 BuildRequires:	perl-devel
