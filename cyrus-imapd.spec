@@ -46,8 +46,8 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.4.13
-Release:	3
+Version:	2.4.17
+Release:	1
 License:	OSI Approved
 Group:		System/Servers
 Url:		http://cyrusimap.org/
@@ -274,6 +274,8 @@ The main package is %{name}.
 %patch100 -p1 -b .flock
 %patch101 -p1 -b .authid_normalize
 %patch102 -p1 -b .debugopt
+
+find . -name Makefile* |xargs sed -i -e 's,configure.in,configure.ac,g'
 
 ## Extra documentation
 mkdir -p extradocs

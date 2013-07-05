@@ -1,6 +1,5 @@
-diff -up cyrus-imapd-2.3.15/lib/auth_unix.c.authid_normalize cyrus-imapd-2.3.15/lib/auth_unix.c
---- cyrus-imapd-2.3.15/lib/auth_unix.c.authid_normalize	2009-09-18 11:53:47.183115911 +0200
-+++ cyrus-imapd-2.3.15/lib/auth_unix.c	2009-09-18 11:53:47.252115833 +0200
+--- cyrus-imapd-2.4.17/lib/auth_unix.c.authid_normalize	2013-07-05 21:15:20.219577370 +0200
++++ cyrus-imapd-2.4.17/lib/auth_unix.c	2013-07-05 21:15:20.266577773 +0200
 @@ -156,10 +156,12 @@ const char *identifier;
  size_t len;
  {
@@ -37,10 +36,9 @@ diff -up cyrus-imapd-2.3.15/lib/auth_unix.c.authid_normalize cyrus-imapd-2.3.15/
      return retbuf;
  }
  
-diff -up cyrus-imapd-2.3.15/lib/imapoptions.authid_normalize cyrus-imapd-2.3.15/lib/imapoptions
---- cyrus-imapd-2.3.15/lib/imapoptions.authid_normalize	2009-09-18 11:53:47.244115877 +0200
-+++ cyrus-imapd-2.3.15/lib/imapoptions	2009-09-18 11:53:47.260115873 +0200
-@@ -1217,6 +1217,11 @@ product version in the capabilities */
+--- cyrus-imapd-2.4.17/lib/imapoptions.authid_normalize	2013-07-05 21:15:20.266577773 +0200
++++ cyrus-imapd-2.4.17/lib/imapoptions	2013-07-05 21:16:16.378056391 +0200
+@@ -1452,6 +1452,11 @@ product version in the capabilities */
     interface, otherwise the user is assumed to be in the default
     domain (if set). */
  
@@ -49,13 +47,12 @@ diff -up cyrus-imapd-2.3.15/lib/imapoptions.authid_normalize cyrus-imapd-2.3.15/
 +   to set this to yes, especially if OpenLDAP is used as authentication
 +   source. */
 +
- /*
- .SH SEE ALSO
- .PP
-diff -up cyrus-imapd-2.3.15/lib/libcyr_cfg.c.authid_normalize cyrus-imapd-2.3.15/lib/libcyr_cfg.c
---- cyrus-imapd-2.3.15/lib/libcyr_cfg.c.authid_normalize	2009-03-31 06:43:20.000000000 +0200
-+++ cyrus-imapd-2.3.15/lib/libcyr_cfg.c	2009-09-18 11:55:03.436822867 +0200
-@@ -154,6 +154,10 @@ struct cyrusopt_s cyrus_options[] = {
+ # {"xlist-*", NULL, STRING }
+ /* Cyrus 2.4 ONLY - enable special use flags.  The valid names
+    can be taken from GMail's XLIST documents or RFC 6154.
+--- cyrus-imapd-2.4.17/lib/libcyr_cfg.c.authid_normalize	2012-12-01 20:57:54.000000000 +0100
++++ cyrus-imapd-2.4.17/lib/libcyr_cfg.c	2013-07-05 21:15:20.267577781 +0200
+@@ -158,6 +158,10 @@ struct cyrusopt_s cyrus_options[] = {
        CFGVAL(long, 1),
        CYRUS_OPT_SWITCH },
  
@@ -66,10 +63,9 @@ diff -up cyrus-imapd-2.3.15/lib/libcyr_cfg.c.authid_normalize cyrus-imapd-2.3.15
      { CYRUSOPT_LAST, { NULL }, CYRUS_OPT_NOTOPT }
  };
  
-diff -up cyrus-imapd-2.3.15/lib/libcyr_cfg.h.authid_normalize cyrus-imapd-2.3.15/lib/libcyr_cfg.h
---- cyrus-imapd-2.3.15/lib/libcyr_cfg.h.authid_normalize	2009-03-31 06:43:20.000000000 +0200
-+++ cyrus-imapd-2.3.15/lib/libcyr_cfg.h	2009-09-18 11:55:33.267115989 +0200
-@@ -114,6 +114,8 @@ enum cyrus_opt {
+--- cyrus-imapd-2.4.17/lib/libcyr_cfg.h.authid_normalize	2012-12-01 20:57:54.000000000 +0100
++++ cyrus-imapd-2.4.17/lib/libcyr_cfg.h	2013-07-05 21:15:20.267577781 +0200
+@@ -116,6 +116,8 @@ enum cyrus_opt {
      CYRUSOPT_SQL_USESSL,
      /* Checkpoint after every recovery (OFF) */
      CYRUSOPT_SKIPLIST_ALWAYS_CHECKPOINT,
