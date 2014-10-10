@@ -100,13 +100,9 @@ Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
 #Requires:	krb5-libs
-Requires(pre):	/usr/sbin/useradd
 Requires(pre):	rpm-helper
-%if %{SASLGROUP}
-Requires(pre):	/usr/sbin/groupadd
-%endif
-Requires(post):	chkconfig /usr/bin/openssl /usr/bin/chattr /bin/grep /bin/cp perl systemd-units
-Requires(preun):/sbin/service chkconfig /usr/sbin/userdel /bin/rm systemd-units
+Requires(post):	chkconfig openssl perl systemd-units
+Requires(preun):rpm-helper systemd-units chkconfig
 %if %{SASLGROUP}
 Requires(preun):/usr/sbin/groupdel
 %endif
