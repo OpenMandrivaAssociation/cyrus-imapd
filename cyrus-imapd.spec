@@ -46,8 +46,8 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	2.4.17
-Release:	12
+Version:	2.4.18
+Release:	1
 License:	OSI Approved
 Group:		System/Servers
 Url:		http://cyrusimap.org/
