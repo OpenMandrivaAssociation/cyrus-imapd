@@ -17,7 +17,7 @@
 %{?_without_autocreate: %define build_autocreate 0}
 
 # create on demand folder requested by sieve filter (default no):
-%define build_autosieve 1
+%define build_autosieve 0
 %{?_without_autosieve: %define build_autosieve 0}
 
 # remove quota files extension:
