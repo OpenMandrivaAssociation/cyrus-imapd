@@ -1,3 +1,5 @@
+%define _disable_lto 1
+
 # use saslauth group if
 %define SASLGROUP 0
 %{?_with_saslgroup: %{expand: %%define SASLGROUP 1}}
