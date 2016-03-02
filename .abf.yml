@@ -1,6 +1,3 @@
-removed_sources:
-  cyrus-imapd-2.4.13.tar.gz: df06d6d4b2b24d631cbbf1aa6f77a94381ce6bb7
-  cyrus-imapd-2.4.17.tar.gz: cc869dea08ad663fc32d9ab628992a1711cfbb1b
 sources:
   cyrus-imapd-2.4.18.tar.gz: 2a3e449afc235ea72ef3b48ba5c0f66eb199faf2
   cyrus-imapd-2.4.18.tar.gz.sig: 852cf8dd2cc70efdc6dafd087a09116d3143581f
