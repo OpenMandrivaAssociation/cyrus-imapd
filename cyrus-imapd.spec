@@ -114,18 +114,18 @@ Provides:	imap-server
 BuildRequires:	autoconf automake libtool
 BuildRequires:	bison
 BuildRequires:	db-devel
-BuildRequires:	ext2fs-devel
+BuildRequires:	pkgconfig(ext2fs)
 BuildRequires:	flex
 BuildRequires:	groff >= 1.15-8
-BuildRequires:	sasl-devel >= 2.1.15
-BuildRequires:	openssl-devel
-BuildRequires:	pcre-devel
+BuildRequires:	pkgconfig(libsasl2)
+BuildRequires:	pkgconfig(libssl)
+BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	perl-devel
 BuildRequires:	perl-Digest-SHA1
-BuildRequires:	tcp_wrappers-devel
+BuildRequires:	wrap-devel
 %if %{with_snmp}
 BuildRequires:	net-snmp-devel
-BuildRequires:  elfutils-devel
+BuildRequires:  pkgconfig(libelf)
 Requires:	net-snmp-mibs
 %endif
 %if %{with_ldap}
@@ -292,7 +292,7 @@ popd
 install -m 0644 %{SOURCE8} cyrus-imapd.pamd
 
 # cleanup
-for i in `find . -type d -name CVS`  `find . -type d -name .svn` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
+for i in $(find . -type d -name CVS)  $(find . -type d -name .svn) $(find . -type f -name .cvs\*) $(find . -type f -name .#\*); do
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
 
@@ -300,9 +300,9 @@ done
 %serverbuild
 
 # it does not work with -fPIE and someone added that to the serverbuild macro...
-CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
-CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
-RPM_OPT_FLAGS=`echo $RPM_OPT_FLAGS |sed -e 's|-fPIE||g'`
+CFLAGS=$(echo $CFLAGS|sed -e 's|-fPIE||g')
+CXXFLAGS=$(echo $CXXFLAGS|sed -e 's|-fPIE||g')
+RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS |sed -e 's|-fPIE||g')
 
 CPPFLAGS="-I%{_includedir}/et $CPPFLAGS"
 export CPPFLAGS
@@ -321,7 +321,7 @@ libtoolize --copy --force; aclocal -I cmulocal; autoheader; autoconf
 # this removes rpath
 export andrew_cv_runpath_switch=none
 
-%configure2_5x \
+%configure \
 %if %{IDLED}
     --with-idle=idled \
 %endif
@@ -383,8 +383,8 @@ perl -pi -e "s#/var/imap#%{_vardata}#" %{_confdir}/*.conf
 
 %install
 
-%makeinstall_std
-%makeinstall_std -C man
+%make_install
+%makei_nstall -C man
 
 %{__install} -m 755 imtest/imtest	%{buildroot}%{_cyrexecdir}/
 %{__install} -m 755 perl/imap/cyradm	%{buildroot}%{_cyrexecdir}/
