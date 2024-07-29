@@ -1,11 +1,12 @@
---- master/master.c.orig	2003-11-24 00:15:21.000000000 +0100
-+++ master/master.c	2003-11-24 00:15:32.000000000 +0100
-@@ -1680,7 +1680,7 @@
- 	}
+diff -up cyrus-imapd-3.8.4/master/master.c.omv~ cyrus-imapd-3.8.4/master/master.c
+--- cyrus-imapd-3.8.4/master/master.c.omv~	2024-07-29 21:23:39.556695979 +0200
++++ cyrus-imapd-3.8.4/master/master.c	2024-07-29 21:23:47.712806808 +0200
+@@ -2905,7 +2905,7 @@ int main(int argc, char **argv)
+         if (dup(0) != fd) fatalf(2, "couldn't dup fd 0: %m");
      }
  
 -    masterconf_init("master", alt_config);
 +    masterconf_init("cyrus-master", alt_config);
  
-     /* zero out the children table */
-     memset(&ctable, 0, sizeof(struct centry *) * child_table_size);
+     if (close_std || error_log) {
+         /* close stdin/out/err */

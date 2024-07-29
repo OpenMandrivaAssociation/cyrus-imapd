@@ -1,0 +1,29 @@
+diff -up cyrus-imapd-3.8.4/configure.ac.omv~ cyrus-imapd-3.8.4/configure.ac
+--- cyrus-imapd-3.8.4/configure.ac.omv~	2024-07-29 22:16:47.218254905 +0200
++++ cyrus-imapd-3.8.4/configure.ac	2024-07-29 22:17:17.958569177 +0200
+@@ -507,7 +507,6 @@ if test "$use_openio" = "yes"; then
+ 		AC_MSG_ERROR([OpenIO include directory '$with_openio_inc' does not exist.])
+ 	fi
+ 
+-	LDFLAGS="$LDFLAGS -L$with_openio_lib"
+ 	CFLAGS="$CFLAGS -I$with_openio_inc"
+ 	openio_headers="oio_sds.h core/oiourl.h"
+ 	for h in $openio_headers; do
+@@ -520,7 +519,7 @@ if test "$use_openio" = "yes"; then
+ 	AC_CHECK_LIB([curl],[curl_version],[],[AC_MSG_ERROR([Library curl not found.])])
+ 	AC_CHECK_LIB([json-c],[json_tokener_parse_ex],[],[AC_MSG_ERROR([Library json-c not found.])])
+ 
+-	LDFLAGS="$LDFLAGS -L$with_openio_lib -loiosds -loiocore -lcurl -ljson-c"
++	LDFLAGS="$LDFLAGS -loiosds -loiocore -lcurl -ljson-c"
+ fi
+ AC_MSG_RESULT([$use_openio])
+ 
+@@ -1141,7 +1140,7 @@ xyes)
+     # try to enable, search in given install directory
+     if test "x$with_ldap" != "x" -a -d "$with_ldap"; then
+         ldap_cppflags="-I${with_ldap}/include"
+-        ldap_ldflags="-L${with_ldap}/lib"
++        ldap_ldflags=""
+         with_ldap=yes
+     else
+         AC_WARN([Disabling LDAP - no include files found])

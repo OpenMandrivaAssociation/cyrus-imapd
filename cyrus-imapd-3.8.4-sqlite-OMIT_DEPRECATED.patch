@@ -1,0 +1,30 @@
+diff -up cyrus-imapd-3.8.4/lib/sqldb.c.omv~ cyrus-imapd-3.8.4/lib/sqldb.c
+--- cyrus-imapd-3.8.4/lib/sqldb.c.omv~	2024-07-29 21:46:22.178401168 +0200
++++ cyrus-imapd-3.8.4/lib/sqldb.c	2024-07-29 22:11:06.211051702 +0200
+@@ -84,9 +84,15 @@ EXPORTED int sqldb_done(void)
+     return 0;
+ }
+ 
+-static void _debug(void *fname, const char *sql)
++static int _debug(unsigned int reason, void* ctx, void* P, void* X)
+ {
+-    syslog(LOG_DEBUG, "sqldb_exec(%s): %s", (const char *) fname, sql);
++    if (reason == SQLITE_TRACE_STMT) {
++        if(X && ((char*)X)[0] && ((char*)X)[1] && (((char*)X)[0] == '-') && (((char*)X)[1] == '-'))
++	    syslog(LOG_DEBUG, "sqldb_exec(stmt): %s", X);
++        else
++	    syslog(LOG_DEBUG, "sqldb_exec(stmt): %s", sqlite3_expanded_sql(P));
++    }
++    return 0;
+ }
+ 
+ static int _free_open(sqldb_t *open)
+@@ -146,7 +152,7 @@ EXPORTED sqldb_t *sqldb_open(const char
+     }
+ 
+     sqlite3_extended_result_codes(open->db, 1);
+-    sqlite3_trace(open->db, _debug, open->fname);
++    sqlite3_trace_v2(open->db, -1, _debug, open->fname);
+ 
+     sqlite3_busy_timeout(open->db, timeout_ms);
+ 
