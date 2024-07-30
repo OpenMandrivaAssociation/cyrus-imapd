@@ -93,6 +93,7 @@ BuildRequires:	groff >= 1.15-8
 BuildRequires:	pkgconfig(libsasl2)
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(jansson)
 BuildRequires:	perl-devel
 BuildRequires:	perl-Digest-SHA1
 BuildRequires:	wrap-devel
