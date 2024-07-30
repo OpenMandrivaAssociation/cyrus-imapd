@@ -76,12 +76,7 @@ Requires:	perl
 Requires:	%{mklibname sasl 2} >= 2.1.15
 #Requires:	krb5-libs
 Requires(pre):	rpm-helper
-Requires(post):	chkconfig openssl perl systemd-units
-Requires(preun):rpm-helper systemd-units chkconfig
-%if %{SASLGROUP}
-Requires(preun):/usr/sbin/groupdel
-%endif
-Requires(postun): systemd-units
+Requires(post):	openssl perl
 Provides:	imap
 Provides:	imap-server
 BuildRequires:	autoconf automake libtool
