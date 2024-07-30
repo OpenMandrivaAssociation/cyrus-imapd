@@ -96,6 +96,8 @@ BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(icu-i18n)
 BuildRequires:	pkgconfig(icu-uc)
+BuildRequires:	pkgconfig(libical)
+BuildRequires:	pkgconfig(libcap)
 BuildRequires:	perl-devel
 BuildRequires:	perl-Digest-SHA1
 BuildRequires:	wrap-devel
