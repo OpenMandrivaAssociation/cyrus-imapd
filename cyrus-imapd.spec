@@ -43,7 +43,7 @@ Version:	3.8.4
 Release:	1
 License:	OSI Approved
 Group:		System/Servers
-Url:		http://cyrusimap.org/
+Url:		https://cyrusimap.org/
 Source0:	https://github.com/cyrusimap/cyrus-imapd/releases/download/cyrus-imapd-%{version}/cyrus-imapd-%{version}.tar.gz
 Source1:	https://github.com/cyrusimap/cyrus-imapd/releases/download/cyrus-imapd-%{version}/cyrus-imapd-%{version}.tar.gz.sig
 Source2:	cyrus-procmailrc
