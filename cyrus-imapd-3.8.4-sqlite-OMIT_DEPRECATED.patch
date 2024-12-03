@@ -1,8 +1,8 @@
-diff -up cyrus-imapd-3.8.4/lib/sqldb.c.omv~ cyrus-imapd-3.8.4/lib/sqldb.c
---- cyrus-imapd-3.8.4/lib/sqldb.c.omv~	2024-07-29 21:46:22.178401168 +0200
-+++ cyrus-imapd-3.8.4/lib/sqldb.c	2024-07-29 22:11:06.211051702 +0200
+diff -up cyrus-imapd-3.10.0/lib/sqldb.c.p6~ cyrus-imapd-3.10.0/lib/sqldb.c
+--- cyrus-imapd-3.10.0/lib/sqldb.c.p6~	2024-08-16 02:24:23.000000000 +0200
++++ cyrus-imapd-3.10.0/lib/sqldb.c	2024-08-20 19:31:40.948575780 +0200
 @@ -84,9 +84,15 @@ EXPORTED int sqldb_done(void)
-     return 0;
+     return SQLDB_OK;
  }
  
 -static void _debug(void *fname, const char *sql)
@@ -11,15 +11,15 @@ diff -up cyrus-imapd-3.8.4/lib/sqldb.c.omv~ cyrus-imapd-3.8.4/lib/sqldb.c
 -    syslog(LOG_DEBUG, "sqldb_exec(%s): %s", (const char *) fname, sql);
 +    if (reason == SQLITE_TRACE_STMT) {
 +        if(X && ((char*)X)[0] && ((char*)X)[1] && (((char*)X)[0] == '-') && (((char*)X)[1] == '-'))
-+	    syslog(LOG_DEBUG, "sqldb_exec(stmt): %s", X);
++           syslog(LOG_DEBUG, "sqldb_exec(stmt): %s", X);
 +        else
-+	    syslog(LOG_DEBUG, "sqldb_exec(stmt): %s", sqlite3_expanded_sql(P));
++           syslog(LOG_DEBUG, "sqldb_exec(stmt): %s", sqlite3_expanded_sql(P));
 +    }
 +    return 0;
  }
  
  static int _free_open(sqldb_t *open)
-@@ -146,7 +152,7 @@ EXPORTED sqldb_t *sqldb_open(const char
+@@ -148,7 +154,7 @@ EXPORTED sqldb_t *sqldb_open(const char
      }
  
      sqlite3_extended_result_codes(open->db, 1);

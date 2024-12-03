@@ -39,7 +39,7 @@
 
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
-Version:	3.8.4
+Version:	3.10.0
 Release:	1
 License:	OSI Approved
 Group:		System/Servers
@@ -93,6 +93,7 @@ BuildRequires:	pkgconfig(icu-i18n)
 BuildRequires:	pkgconfig(icu-uc)
 BuildRequires:	pkgconfig(libical)
 BuildRequires:	pkgconfig(libcap)
+BuildRequires:	pkgconfig(xapian-core)
 BuildRequires:	perl-devel
 BuildRequires:	perl-Digest-SHA1
 BuildRequires:	wrap-devel
@@ -293,6 +294,9 @@ export andrew_cv_runpath_switch=none
     --enable-netscapehack \
     --enable-listext \
     --enable-nntp \
+    --enable-xapian \
+    --enable-http \
+    --enable-jmap \
     --with-perl=%{__perl} \
 #    --with-krb=%{_prefix}/kerberos \
 
@@ -481,6 +485,7 @@ fi
 %attr(0755,root,root) %{_libexecdir}/cyr_systemd_helper
 %attr(0755,root,root) %{_libexecdir}/cyrus-master
 %attr(0755,root,root) %{_libexecdir}/fud
+%attr(0755,root,root) %{_libexecdir}/httpd
 %attr(0755,root,root) %{_libexecdir}/imapd
 %attr(0755,root,root) %{_libexecdir}/lmtpd
 %attr(0755,root,root) %{_libexecdir}/masssievec
@@ -530,6 +535,7 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/ctl_cyrusdb.8*
 %attr(0644,root,root) %{_mandir}/man8/ctl_deliver.8*
 %attr(0644,root,root) %{_mandir}/man8/ctl_mboxlist.8*
+%attr(0644,root,root) %{_mandir}/man8/ctl_zoneinfo.8*
 %attr(0644,root,root) %{_mandir}/man8/cvt_cyrusdb.8*
 %attr(0644,root,root) %{_mandir}/man8/cyr_dbtool.8*
 %attr(0644,root,root) %{_mandir}/man8/cyr_df.8*
@@ -538,6 +544,7 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/cyrus-master.8*
 %attr(0644,root,root) %{_mandir}/man8/deliver.8*
 %attr(0644,root,root) %{_mandir}/man8/fud.8*
+%attr(0644,root,root) %{_mandir}/man8/httpd.8*
 %attr(0644,root,root) %{_mandir}/man8/idled.8*
 %attr(0644,root,root) %{_mandir}/man8/imapd.8*
 %attr(0644,root,root) %{_mandir}/man8/ipurge.8*
