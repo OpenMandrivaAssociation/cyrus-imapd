@@ -99,6 +99,8 @@ BuildRequires:	perl-Digest-SHA1
 BuildRequires:	wrap-devel
 BuildRequires:	slibtool
 BuildRequires:	rsync
+BuildRequires:	xxd
+Requires:	xxd
 %if %{with_snmp}
 BuildRequires:	net-snmp-devel
 BuildRequires:  pkgconfig(libelf)
