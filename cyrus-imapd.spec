@@ -94,6 +94,7 @@ BuildRequires:	pkgconfig(icu-uc)
 BuildRequires:	pkgconfig(libical)
 BuildRequires:	pkgconfig(libcap)
 BuildRequires:	pkgconfig(xapian-core)
+BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	perl-devel
 BuildRequires:	perl-Digest-SHA1
 BuildRequires:	wrap-devel
