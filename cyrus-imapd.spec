@@ -79,6 +79,7 @@ Requires(pre):	rpm-helper
 Requires(post):	openssl perl
 Provides:	imap
 Provides:	imap-server
+BuildRequires:	libtool-base
 BuildRequires:	autoconf automake libtool
 BuildRequires:	bison
 BuildRequires:	db-devel
