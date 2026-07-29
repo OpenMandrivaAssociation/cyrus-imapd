@@ -40,7 +40,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	3.10.0
-Release:9
+Release:10
 License:	OSI Approved
 Group:		System/Servers
 Url:		https://cyrusimap.org/
@@ -259,7 +259,7 @@ RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS |sed -e 's|-fPIE||g')
 
 CPPFLAGS="-I%{_includedir}/et $CPPFLAGS"
 export CPPFLAGS
-CFLAGS="$RPM_OPT_FLAGS -fPIC"
+CFLAGS="$RPM_OPT_FLAGS -fPIC -Wno-error=incompatible-function-pointer-types -Wno-incompatible-function-pointer-types -Wno-error=incompatible-pointer-types -Wno-incompatible-pointer-types"
 export CFLAGS
 LDFLAGS="-L%{_libdir}"
 export LDFLAGS
