@@ -40,7 +40,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	3.10.0
-Release:10
+Release:11
 License:	OSI Approved
 Group:		System/Servers
 Url:		https://cyrusimap.org/
@@ -246,6 +246,10 @@ install -m 0644 %{SOURCE8} cyrus-imapd.pamd
 for i in $(find . -type d -name CVS)  $(find . -type d -name .svn) $(find . -type f -name .cvs\*) $(find . -type f -name .#\*); do
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
+
+
+# C23: unprototyped callback int (*)() conflicts with full prototype in header
+sed -i 's/int (\*proc)()/int (*proc)(const char *, int, struct zoneinfo *, void *)/' imap/zoneinfo_db.c
 
 %build
 export CFLAGS="%{optflags} -Wno-error=incompatible-function-pointer-types -Wno-incompatible-function-pointer-types -Wno-error=incompatible-pointer-types -Wno-incompatible-pointer-types"
