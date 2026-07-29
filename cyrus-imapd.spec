@@ -40,7 +40,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	3.10.0
-Release:8
+Release:9
 License:	OSI Approved
 Group:		System/Servers
 Url:		https://cyrusimap.org/
@@ -248,6 +248,8 @@ for i in $(find . -type d -name CVS)  $(find . -type d -name .svn) $(find . -typ
 done
 
 %build
+export CFLAGS="%{optflags} -Wno-error=incompatible-function-pointer-types -Wno-incompatible-function-pointer-types -Wno-error=incompatible-pointer-types -Wno-incompatible-pointer-types"
+export CXXFLAGS="$CFLAGS"
 %serverbuild
 
 # it does not work with -fPIE and someone added that to the serverbuild macro...
