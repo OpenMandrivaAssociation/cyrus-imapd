@@ -1,2 +1,4 @@
 sources:
-  cyrus-imapd-3.10.0.tar.gz: ede47b272983d7f03f8402c2beffa5d29d58b24d
+  cmu.mib: 987f7438a7c5de5ff5dc27df10cd987f7058cef1
+  cyrus-imapd-3.12.3.tar.gz: 0bf698db92df5bec7ef48baee199dac79931fc43
+  imapcreate.pl: 5bb21ca9dd472d03c4fed0e25e8bb65b867357bc
