@@ -571,9 +571,11 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/timsieved.8*
 %attr(0644,root,root) %{_mandir}/man8/tls_prune.8*
 %attr(0644,root,root) %{_mandir}/man8/unexpunge.8*
+%{_mandir}/man8/calalarmd.8*
 %{_mandir}/man8/ctl_conversationsdb.8*
 %{_mandir}/man8/cvt_xlist_specialuse.8*
 %{_mandir}/man8/cyr_buildinfo.8*
+%{_mandir}/man8/cyr_withlock_run.8*
 %{_mandir}/man8/cyr_deny.8*
 %{_mandir}/man8/cyr_info.8*
 %{_mandir}/man8/cyr_ls.8*
@@ -593,6 +595,9 @@ fi
 %{_mandir}/man8/relocate_by_id.8*
 %{_mandir}/man8/sievec.8*
 %{_mandir}/man8/sieved.8*
+%{_mandir}/man8/sync_client.8*
+%{_mandir}/man8/sync_reset.8*
+%{_mandir}/man8/sync_server.8*
 %doc README.RPM
 
 %files murder
