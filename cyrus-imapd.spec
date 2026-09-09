@@ -571,11 +571,8 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/timsieved.8*
 %attr(0644,root,root) %{_mandir}/man8/tls_prune.8*
 %attr(0644,root,root) %{_mandir}/man8/unexpunge.8*
-%{_mandir}/man8/backupd.8*
-%{_mandir}/man8/ctl_backups.8*
 %{_mandir}/man8/ctl_conversationsdb.8*
 %{_mandir}/man8/cvt_xlist_specialuse.8*
-%{_mandir}/man8/cyr_backup.8*
 %{_mandir}/man8/cyr_buildinfo.8*
 %{_mandir}/man8/cyr_deny.8*
 %{_mandir}/man8/cyr_info.8*
@@ -594,7 +591,6 @@ fi
 %{_mandir}/man8/ptexpire.8*
 %{_mandir}/man8/ptloader.8*
 %{_mandir}/man8/relocate_by_id.8*
-%{_mandir}/man8/restore.8*
 %{_mandir}/man8/sievec.8*
 %{_mandir}/man8/sieved.8*
 %doc README.RPM
