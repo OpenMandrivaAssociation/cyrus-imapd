@@ -40,7 +40,7 @@
 Summary:	A high-performance mail store with IMAP and POP3 support
 Name:		cyrus-imapd
 Version:	3.12.4
-Release:	2
+Release:	3
 License:	OSI Approved
 Group:		System/Servers
 Url:		https://cyrusimap.org/
@@ -73,6 +73,8 @@ Patch7:		cyrus-imapd-3.8.4-no-Lusrlib.patch
 Patch19:	cyrus-imapd-2.3.11-mkimap.patch
 # libical 4 hides vcardstructuredtype; index search text through the accessors
 Patch20:	cyrus-imapd-3.12.4-libical4-vcard.patch
+# libical 4 removed the old time, duration, and enum names
+Patch21:	cyrus-imapd-3.12.4-libical4-renames.patch
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -228,6 +230,7 @@ The main package is %{name}.
 
 %patch 19 -p1 -b .mkimap.orig
 %patch 20 -p1 -b .libical4~
+%patch 21 -p1 -b .libical4renames~
 
 ## Extra documentation
 mkdir -p extradocs

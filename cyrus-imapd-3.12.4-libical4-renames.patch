@@ -1,0 +1,37 @@
+--- cyrus-imapd-3.12.4/imap/ical_support.h
++++ cyrus-imapd-3.12.4/imap/ical_support.h
+@@ -53,6 +53,34 @@
+ #define icalerror_warn(message) \
+ {syslog(LOG_WARNING, "icalerror: %s(), %s:%d: %s", __FUNCTION__, __FILE__, __LINE__, message);}
+ 
++#if ICAL_MAJOR_VERSION >= 4
++/* libical 4 renamed these. The old names are gone, not deprecated. */
++#define icaltime_add(t, d) icalduration_extend((t), (d))
++#define icaltime_subtract(t1, t2) icalduration_from_times((t1), (t2))
++#define icaldurationtype_as_int icaldurationtype_as_seconds
++#define icaldurationtype_from_int icaldurationtype_from_seconds
++#define icalenum_component_kind_to_string icalcomponent_kind_to_string
++#define icalenum_string_to_component_kind icalcomponent_string_to_kind
++#define icalenum_string_to_property_kind icalproperty_string_to_kind
++#define icalenum_string_to_value_kind icalvalue_string_to_kind
++#define icalenum_method_to_string icalproperty_method_to_string
++#define icalenum_string_to_method icalproperty_string_to_method
++#ifndef icalerror_check_arg_rv
++#define icalerror_check_arg_rv(arg, argname) \
++    if ((arg) == 0) { \
++        icalerror_set_errno(ICAL_BADARG_ERROR); \
++        return; \
++    }
++#endif
++#ifndef icalerror_check_arg_rz
++#define icalerror_check_arg_rz(arg, argname) \
++    if ((arg) == 0) { \
++        icalerror_set_errno(ICAL_BADARG_ERROR); \
++        return 0; \
++    }
++#endif
++#endif
++
+ #include "dav_util.h"
+ #include "mailbox.h"
+ 
