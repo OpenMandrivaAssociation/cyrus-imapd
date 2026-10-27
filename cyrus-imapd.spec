@@ -71,6 +71,8 @@ Patch6:		cyrus-imapd-3.8.4-sqlite-OMIT_DEPRECATED.patch
 Patch7:		cyrus-imapd-3.8.4-no-Lusrlib.patch
 # Other patches from simon matter
 Patch19:	cyrus-imapd-2.3.11-mkimap.patch
+# libical 4 hides vcardstructuredtype; index search text through the accessors
+Patch20:	cyrus-imapd-3.12.4-libical4-vcard.patch
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -225,6 +227,7 @@ The main package is %{name}.
 %patch 7 -p1 -b .p7~
 
 %patch 19 -p1 -b .mkimap.orig
+%patch 20 -p1 -b .libical4~
 
 ## Extra documentation
 mkdir -p extradocs
