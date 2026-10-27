@@ -1,0 +1,23 @@
+--- cyrus-imapd-3.12.4/imap/jmap_ical.c
++++ cyrus-imapd-3.12.4/imap/jmap_ical.c
+@@ -3337,7 +3337,11 @@
+              param;
+              param = icalproperty_get_next_parameter(prop, ICAL_FEATURE_PARAMETER)) {
+ 
+-            switch (icalparameter_get_feature(param)) {
++            /* libical 4's getter returns the list. The enum is _nth. */
++            size_t nfeat = icalparameter_get_feature_size(param);
++            size_t fi;
++            for (fi = 0; fi < nfeat; fi++) {
++            switch (icalparameter_get_feature_nth(param, fi)) {
+             case ICAL_FEATURE_AUDIO:
+                 json_object_set_new(features, "audio", json_true());
+                 break;
+@@ -3362,6 +3366,7 @@
+             case ICAL_FEATURE_X:
+             case ICAL_FEATURE_NONE:;
+             }
++            }
+         }
+         if (json_object_size(features)) {
+             json_object_set(loc, "features", features);
