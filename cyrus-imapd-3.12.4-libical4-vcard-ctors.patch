@@ -1,0 +1,57 @@
+--- cyrus-imapd-3.12.4/imap/vcard_support.h
++++ cyrus-imapd-3.12.4/imap/vcard_support.h
+@@ -86,9 +86,6 @@
+ 
+ extern const char *vcardproperty_get_xparam_value(vcardproperty *prop,
+                                                   const char *name);
+-
+-extern void vcardproperty_add_type_parameter(vcardproperty *prop,
+-                                             vcardenumarray_element *type);
+ #endif /* HAVE_LIBICALVCARD */
+ 
+ #endif /* VCARD_SUPPORT_H */
+--- cyrus-imapd-3.12.4/imap/vcard_support.c
++++ cyrus-imapd-3.12.4/imap/vcard_support.c
+@@ -799,22 +799,4 @@
+     return NULL;
+ }
+ 
+-EXPORTED void vcardproperty_add_type_parameter(vcardproperty *prop,
+-                                               vcardenumarray_element *type)
+-{
+-    vcardenumarray *types;
+-    vcardparameter *param =
+-        vcardproperty_get_first_parameter(prop, VCARD_TYPE_PARAMETER);
+-
+-    if (param) {
+-        types = vcardparameter_get_type(param);
+-    }
+-    else {
+-        types = vcardenumarray_new(1);
+-        param = vcardparameter_new_type(types);
+-        vcardproperty_add_parameter(prop, param);
+-    }
+-    vcardenumarray_append(types, type);
+-}
+-
+ #endif /* HAVE_LIBVCARDVCARD */
+--- cyrus-imapd-3.12.4/imap/jmap_contact.c
++++ cyrus-imapd-3.12.4/imap/jmap_contact.c
+@@ -9530,7 +9530,7 @@
+             }
+ 
+             /* Add SORT-AS parameter */
+-            vcardproperty_add_parameter(prop, vcardparameter_new_sortas(sortas));
++            vcardproperty_add_parameter(prop, vcardparameter_new_sortas_list(sortas));
+ 
+             jmap_parser_pop(parser);
+         }
+@@ -9700,7 +9700,7 @@
+ 
+         prop =  vcardproperty_new_org(units);
+         if (sortas) {
+-            vcardproperty_add_parameter(prop, vcardparameter_new_sortas(sortas));
++            vcardproperty_add_parameter(prop, vcardparameter_new_sortas_list(sortas));
+         }
+ 
+         if (!props) {

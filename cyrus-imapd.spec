@@ -75,6 +75,9 @@ Patch19:	cyrus-imapd-2.3.11-mkimap.patch
 Patch20:	cyrus-imapd-3.12.4-libical4-vcard.patch
 # libical 4 removed the old time, duration, and enum names
 Patch21:	cyrus-imapd-3.12.4-libical4-renames.patch
+# libical 4's list constructors take the array; the short names take one value.
+# add_type_parameter is provided by libical itself.
+Patch22:	cyrus-imapd-3.12.4-libical4-vcard-ctors.patch
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -231,6 +234,7 @@ The main package is %{name}.
 %patch 19 -p1 -b .mkimap.orig
 %patch 20 -p1 -b .libical4~
 %patch 21 -p1 -b .libical4renames~
+%patch 22 -p1 -b .libical4vcardctors~
 
 ## Extra documentation
 mkdir -p extradocs
