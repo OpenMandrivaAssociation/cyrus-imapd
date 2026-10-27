@@ -80,6 +80,8 @@ Patch21:	cyrus-imapd-3.12.4-libical4-renames.patch
 Patch22:	cyrus-imapd-3.12.4-libical4-vcard-ctors.patch
 # FEATURE is multi-valued in libical 4; the plain getter returns the array.
 Patch23:	cyrus-imapd-3.12.4-libical4-feature.patch
+# vcardstructuredtype is opaque in libical 4.
+Patch24:	cyrus-imapd-3.12.4-libical4-structured.patch
 Requires:	perl
 # with previous versions of sasl, imap LOGIN would fail
 Requires:	%{mklibname sasl 2} >= 2.1.15
@@ -238,6 +240,7 @@ The main package is %{name}.
 %patch 21 -p1 -b .libical4renames~
 %patch 22 -p1 -b .libical4vcardctors~
 %patch 23 -p1 -b .libical4feature~
+%patch 24 -p1 -b .libical4struct~
 
 ## Extra documentation
 mkdir -p extradocs
