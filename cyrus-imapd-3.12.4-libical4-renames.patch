@@ -35,3 +35,13 @@
  #include "dav_util.h"
  #include "mailbox.h"
  
+@@ -296,7 +324,9 @@
+ #endif
+ 
+ /* Functions that should be declared in libical */
++#if ICAL_MAJOR_VERSION < 4
+ #define icaltimezone_set_zone_directory set_zone_directory
++#endif
+ 
+ #define icalcomponent_get_tzuntil_property(comp) \
+     icalcomponent_get_first_property(comp, ICAL_TZUNTIL_PROPERTY)
